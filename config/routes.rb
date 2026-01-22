@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  get "memos/index"
+  get "memos/new"
+  get "memos/edit"
+  devise_for :users
+  resources :memos, except: [:show]
+
+  root "memos#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

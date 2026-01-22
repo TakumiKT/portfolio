@@ -1,0 +1,38 @@
+<% if memo.errors.any? %>
+  <div>
+    <ul>
+      <% memo.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div>
+  <%= f.label :symptom, "相談内容・症状" %><br>
+  <%= f.text_area :symptom, rows: 3 %>
+</div>
+
+<div>
+  <%= f.label :check_point, "接客時に確認したポイント" %><br>
+  <%= f.text_area :check_point, rows: 3 %>
+</div>
+
+<div>
+  <%= f.label :judgment, "自分の判断・対応内容" %><br>
+  <%= f.text_area :judgment, rows: 3 %>
+</div>
+
+<div>
+  <%= f.label :concern_point, "注意点・迷った点（任意）" %><br>
+  <%= f.text_area :concern_point, rows: 3 %>
+</div>
+
+<div>
+  <%= f.label :reflection, "振り返り・改善点（任意）" %><br>
+  <%= f.text_area :reflection, rows: 3 %>
+</div>
+
+<div>
+  <%= f.submit %>
+</div>
