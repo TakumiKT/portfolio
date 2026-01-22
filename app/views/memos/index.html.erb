@@ -1,0 +1,17 @@
+<h1>接客メモ一覧</h1>
+
+<%= link_to "新規メモを作成", new_memo_path %>
+
+<% if @memos.empty? %>
+  <p>まだメモがありません。まずは1件作成してみましょう。</p>
+<% else %>
+  <ul>
+    <% @memos.each do |memo| %>
+      <li>
+        <strong><%= memo.created_at.strftime("%Y/%m/%d") %></strong>
+        <%= truncate(memo.symptom, length: 40) %>
+        <%= link_to "開く", edit_memo_path(memo) %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
