@@ -38,7 +38,7 @@ class MemosController < ApplicationController
 
   private
 
-  # 他ユーザーのメモにアクセスできないよう current_user 経由で取得
+  # 他ユーザーのメモにアクセスできないよう制御 current_user 経由で取得
   def set_memo
     @memo = current_user.memos.find(params[:id])
   end
