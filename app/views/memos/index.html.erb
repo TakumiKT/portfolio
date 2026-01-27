@@ -1,0 +1,66 @@
+<h1>接客メモ一覧</h1>
+
+<%= link_to "新規メモを作成", new_memo_path %>
+
+<%= form_with url: memos_path, method: :get, local: true do |f| %>
+  <%= f.text_field :q, value: @q, placeholder: "キーワード（症状・判断内容など）" %>
+
+  <%# すでにタグで絞り込み中なら、検索してもタグ条件を維持 %>
+  <% if @tag_id.present? %>
+    <%= hidden_field_tag :tag_id, @tag_id %>
+  <% end %>
+
+  <%= f.submit "検索" %>
+
+  <%# 条件リセット %>
+  <%= link_to "クリア", memos_path %> 
+<% end %>
+
+<% if @q.present? || @tag_id.present? %>
+  <p>
+    条件：
+    <% if @q.present? %>キーワード「<%= @q %>」<% end %>
+
+        <% if @selected_tag.present? %>
+      / <%= link_to "##{@selected_tag.name}", memos_path(tag_id: @selected_tag.id, q: @q.presence) %>
+    <% elsif @tag_id.present? %>
+      / タグ（削除済み）
+    <% end %>
+  </p>
+<% end %>
+
+<% if @tags.any? %>
+  <section>
+    <p>タグ一覧：</p>
+
+    <div class="tag-grid">
+      <% @tags.each do |tag| %>
+        <div class="tag-item">
+          <%= link_to "##{tag.name}", memos_path(tag_id: tag.id, q: @q.presence) %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+<% end %>
+
+<% if @memos.empty? %>
+  <p>まだメモがありません。まずは1件作成してみましょう。</p>
+<% else %>
+  <ul>
+    <% @memos.each do |memo| %>
+      <li>
+        <strong><%= memo.created_at.strftime("%Y/%m/%d") %></strong>
+        <%= truncate(memo.symptom, length: 40) %>
+        <%= link_to "開く", edit_memo_path(memo) %>
+
+        <% if memo.tags.any? %>
+          <div>
+            <% memo.tags.each do |tag| %>
+              <%= link_to "##{tag.name}", memos_path(tag_id: tag.id, q: @q.presence) %>
+            <% end %>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
