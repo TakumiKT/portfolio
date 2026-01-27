@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_20_062050) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_24_014607) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "memo_tags", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "memo_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["memo_id", "tag_id"], name: "index_memo_tags_on_memo_id_and_tag_id", unique: true
+    t.index ["memo_id"], name: "index_memo_tags_on_memo_id"
+    t.index ["tag_id"], name: "index_memo_tags_on_tag_id"
+  end
 
   create_table "memos", force: :cascade do |t|
     t.text "check_point"
@@ -24,6 +34,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_20_062050) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_memos_on_user_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id", "name"], name: "index_tags_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_tags_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -39,5 +58,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_20_062050) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "memo_tags", "memos"
+  add_foreign_key "memo_tags", "tags"
   add_foreign_key "memos", "users"
+  add_foreign_key "tags", "users"
 end

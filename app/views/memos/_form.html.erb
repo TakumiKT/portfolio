@@ -34,5 +34,10 @@
 </div>
 
 <div>
+  <%= f.label :tag_names, "タグ（カンマ区切り）" %><br>
+  <%= f.text_field :tag_names, value: memo.tag_names, placeholder: "例：かぜ, 小児, 禁忌確認" %>
+</div>
+
+<div>
   <%= f.submit %>
 </div>

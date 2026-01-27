@@ -2,8 +2,38 @@ class MemosController < ApplicationController
   before_action :authenticate_user!
   before_action :set_memo, only: [:edit, :update, :destroy]
 
-  def index
-    @memos = current_user.memos.order(created_at: :desc)
+def index
+  @q = params[:q].to_s.strip
+  @tag_id = params[:tag_id]
+  @selected_tag = current_user.tags.find_by(id: @tag_id) if @tag_id.present?
+  @memos = current_user.memos.includes(:tags).order(created_at: :desc)
+
+  # 絞り込み時にタグ名を表示
+  if @tag_id.present?
+    @memos = @memos.joins(:memo_tags).where(memo_tags: { tag_id: @tag_id })
+  end
+
+  # キーワード検索（複数カラムを対象）
+  if @q.present?
+    like = "%#{ActiveRecord::Base.sanitize_sql_like(@q)}%"
+    @memos = @memos.left_joins(:tags).where(
+      "memos.symptom ILIKE :q OR memos.check_point ILIKE :q OR memos.judgment ILIKE :q OR memos.concern_point ILIKE :q OR memos.reflection ILIKE :q OR tags.name ILIKE :q",
+      q: like
+    )
+  end
+
+    @memos = @memos.distinct
+    @tags = current_user.tags
+      .joins(:memos)   # memosと紐づくタグだけ
+      .where(memos: { user_id: current_user.id })
+      .distinct
+      .order(:name)
+
+end
+
+  # タグで絞り込み（ANDで追加）
+  if @tag_id.present?
+    @memos = @memos.joins(:memo_tags).where(memo_tags: { tag_id: @tag_id })
   end
 
   def new
@@ -11,8 +41,9 @@ class MemosController < ApplicationController
   end
 
   def create
-    @memo = current_user.memos.build(memo_params)
+    @memo = current_user.memos.build(memo_params.except(:tag_names))
     if @memo.save
+      save_tags(@memo, memo_params[:tag_names])
       redirect_to memos_path, notice: "メモを作成しました"
     else
       render :new, status: :unprocessable_entity
@@ -24,7 +55,8 @@ class MemosController < ApplicationController
   end
 
   def update
-    if @memo.update(memo_params)
+    if @memo.update(memo_params.except(:tag_names))
+      save_tags(@memo, memo_params[:tag_names])
       redirect_to memos_path, notice: "メモを更新しました"
     else
       render :edit, status: :unprocessable_entity
@@ -36,7 +68,7 @@ class MemosController < ApplicationController
     redirect_to memos_path, notice: "メモを削除しました"
   end
 
-  private
+private
 
   # 他ユーザーのメモにアクセスできないよう current_user 経由で取得
   def set_memo
@@ -44,6 +76,21 @@ class MemosController < ApplicationController
   end
 
   def memo_params
-    params.require(:memo).permit(:symptom, :check_point, :judgment, :concern_point, :reflection)
+    params.require(:memo).permit(:symptom, :check_point, :judgment, :concern_point, :reflection, :tag_names)
+  end
+
+  def save_tags(memo, tag_names)
+    names = (tag_names || "")
+              .split(/[,\s]+/)  # カンマ/空白区切り
+              .map { |s| s.strip }
+              .reject(&:blank?)
+              .uniq
+
+    tags = names.map do |name|
+      # 同じユーザー内でタグを再利用
+      current_user.tags.find_or_create_by!(name: name)
+    end
+
+    memo.tags = tags
   end
 end

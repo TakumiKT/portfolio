@@ -3,4 +3,5 @@ class User < ApplicationRecord
          :rememberable, :validatable
 
   has_many :memos, dependent: :destroy
+  has_many :tags, dependent: :destroy
 end
