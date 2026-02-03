@@ -1,0 +1,7 @@
+<h1>新規メモ</h1>
+
+<%= form_with model: @memo do |f| %>
+  <%= render "form", f: f, memo: @memo %>
+<% end %>
+
+<%= link_to "一覧へ戻る", memos_path %>
