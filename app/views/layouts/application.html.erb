@@ -20,17 +20,15 @@
   </head>
 
   <body>
-    <header>
-      <% if user_signed_in? %>
-        <%= link_to "メモ一覧", memos_path %>
-        <%= link_to "新規メモ", new_memo_path %>
-        <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %>
-      <% else %>
-        <%= link_to "新規登録", new_user_registration_path %>
-        <%= link_to "ログイン", new_user_session_path %>
-      <% end %>
-    </header>
 
-    <%= yield %>
+  <%= render "shared/header" %>
+
+  <%= yield %>
+
+  <%= render "shared/footer" %>
+
+  </body>
+  <main>
+  </main>
   </body>
 </html>

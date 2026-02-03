@@ -1,9 +1,17 @@
 Rails.application.routes.draw do
+  get "pages/terms"
+  get "pages/privacy"
+  get "pages/contact"
   get "memos/index"
   get "memos/new"
   get "memos/edit"
-  devise_for :users
+  devise_for :users, controllers: { registrations: "users/registrations" }
   resources :memos, except: [:show]
+
+  #フッター
+  get "/terms",   to: "pages#terms"
+  get "/privacy", to: "pages#privacy"
+  get "/contact", to: "pages#contact"
 
   root "memos#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

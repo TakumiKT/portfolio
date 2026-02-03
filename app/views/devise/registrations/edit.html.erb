@@ -1,7 +1,20 @@
 <h2>Edit <%= resource_name.to_s.humanize %></h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name),
+             html: { method: :put, multipart: true }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div>
+    <%= f.label :avatar, "ユーザーアイコン" %><br>
+    <%= f.file_field :avatar, accept: "image/*" %>
+  </div>
+
+  <% if resource.avatar.attached? %>
+    <div>
+      <%= image_tag resource.avatar.variant(resize_to_fill: [80, 80]),
+                    alt: "ユーザーアイコン", style: "border-radius: 50%;" %>
+    </div>
+  <% end %>
 
   <div class="field">
     <%= f.label :email %><br />
@@ -26,18 +39,19 @@
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+  <div>
+    <%= f.label :current_password %>
+    <small>（メール/パスワードを変更する場合のみ必要）</small><br>
     <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
+ </div>
 
   <div class="actions">
-    <%= f.submit "Update" %>
+    <%= f.submit "ユーザー情報を更新する" %>
   </div>
 <% end %>
 
-<h3>Cancel my account</h3>
+<h3>アカウントを削除</h3>
 
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
+<div><%= button_to "アカウントを削除する", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
 
-<%= link_to "Back", :back %>
+<%= link_to "戻る", :back %>
