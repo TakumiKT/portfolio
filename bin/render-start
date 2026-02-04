@@ -1,0 +1,5 @@
+set -e
+
+bundle exec rails db:migrate
+
+exec bundle exec puma -t 5:5 -p ${PORT:-3000} -e production

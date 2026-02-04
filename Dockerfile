@@ -14,4 +14,4 @@ RUN bundle install
 
 COPY . .
 
-CMD ["bash"]
+CMD ["bash", "-lc", "bin/render-start"]
