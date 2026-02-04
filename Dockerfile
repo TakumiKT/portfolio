@@ -10,8 +10,10 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
 COPY Gemfile Gemfile.lock ./
-RUN chmod +x bin/render-start
+RUN bundle install
 
 COPY . .
+
+RUN chmod +x bin/render-start
 
 CMD ["bash", "-lc", "bin/render-start"]
