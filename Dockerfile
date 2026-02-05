@@ -15,5 +15,6 @@ RUN bundle install
 COPY . .
 
 RUN chmod +x bin/render-start
+RUN SECRET_KEY_BASE_DUMMY=1 RAILS_ENV=production bundle exec rails assets:precompile
 
 CMD ["bash", "-lc", "bin/render-start"]
