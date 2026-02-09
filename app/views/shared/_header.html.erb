@@ -1,24 +1,23 @@
 <header class="app-header">
   <nav class="app-header__nav">
     <div class="app-header__left">
-      <%= link_to "アプリロゴ", memos_path, class: "app-header__brand" %>
-
-      <% if user_signed_in? %>
-        <%= link_to "メモ一覧", memos_path, class: "app-header__link" %>
-        <%= link_to "新規メモ", new_memo_path, class: "app-header__link" %>
+      <%= link_to memos_path, class: "app-header__brand" do %>
+        <%= image_tag asset_path("logo.svg"), alt: "MEMOTC", class: "app-header__logo" %>
       <% end %>
+      <%= link_to "メモ一覧", memos_path, class: "app-header__link" %>
+      <%= link_to "新規メモ", new_memo_path, class: "app-header__link" %>
     </div>
 
     <div class="app-header__right">
       <% if user_signed_in? %>
         <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "app-header__button" %>
 
-        <%= link_to edit_user_registration_path, class: "app-header__avatar-link" do %>
+        <%= link_to edit_user_registration_path do %>
           <%= image_tag(
-                (current_user.avatar.attached? ? url_for(current_user.avatar.variant(resize_to_fill: [40, 40])) : asset_path("default_avatar.png")),
+                current_user.avatar.attached? ?
+                  url_for(current_user.avatar.variant(resize_to_fill: [40, 40])) :
+                  asset_path("default_avatar.png"),
                 alt: "ユーザーアイコン",
-                width: 40,
-                height: 40,
                 class: "app-header__avatar"
               ) %>
         <% end %>
