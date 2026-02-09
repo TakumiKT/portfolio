@@ -1,3 +1,4 @@
+<div class="card">
 <h1>接客メモ一覧</h1>
 
 <%= link_to "新規メモを作成", new_memo_path %>
@@ -13,7 +14,8 @@
   <%= f.submit "検索" %>
 
   <%# 条件リセット %>
-  <%= link_to "クリア", memos_path %> 
+  <%= link_to "クリア", memos_path %>
+  </div>
 <% end %>
 
 <% if @q.present? || @tag_id.present? %>

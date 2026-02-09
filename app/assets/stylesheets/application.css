@@ -1,20 +1,86 @@
+.app-header {
+  background-color: #c8d4ec;
+  border-bottom: 1px solid #ddd;
+}
+
+.app-header__brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.app-header__logo {
+  height: 28px; /* 好みで */
+  width: auto;
+  display: block;
+}
+
 .app-header__nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  padding: 12px 16px;
 }
 
-.app-header__left,
-.app-header__right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.app-header__link {
+  color: #333;
+  text-decoration: none;
+  margin-left: 12px;
+}
+
+.app-header__link:hover {
+  text-decoration: underline;
+}
+
+.app-header__logo {
+  color: #111;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 .app-header__avatar {
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   object-fit: cover;
+  margin-left: 12px;
+}
+
+/* 全体 */
+body {
+  margin: 0;
+  color: #222;
+  background-color:#FFF3E3;
+}
+
+/* 本文エリア */
+.app-main {
+  padding: 24px 0;
+  min-height: calc(100vh - 120px); /* ヘッダー+フッター分はざっくり */
+}
+
+/* 画面の横幅 */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.card {
+  background: #6F789D;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+/* タグ */
+.tag-item a {
+  display: inline-block;
+  padding: 6px 10px;
+  background-color: #cdf1bf;
+  border: 1px solid #3e41ee;
+  border-radius: 9999px;
+  text-decoration: none;
 }
 
 .tag-grid {
@@ -35,10 +101,29 @@
   }
 }
 
-.tag-item a {
-  display: inline-block;
-  padding: 6px 10px;
-  border: 1px solid #ddd;
-  border-radius: 9999px;
+.app-footer {
+  border-top: 1px solid #e5e5e5;
+  background: #c8d4ec;
+  padding: 16px 0;
+}
+
+.app-footer__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-footer__links a {
+  color: #333;
   text-decoration: none;
+  margin-right: 12px;
+}
+
+.app-footer__links a:hover {
+  text-decoration: underline;
+}
+
+.app-footer__copy {
+  color: #666;
 }
