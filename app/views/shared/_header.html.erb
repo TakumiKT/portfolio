@@ -1,7 +1,7 @@
 <header class="app-header">
   <nav class="app-header__nav">
     <div class="app-header__left">
-      <%= link_to memos_path, class: "app-header__brand" do %>
+      <%= link_to (user_signed_in? ? memos_path : root_path), class: "app-header__brand" do %>
         <%= image_tag asset_path("logo.svg"), alt: "MEMOTC", class: "app-header__logo" %>
       <% end %>
       <%= link_to "メモ一覧", memos_path, class: "app-header__link" %>
