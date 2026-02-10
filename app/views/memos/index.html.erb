@@ -24,7 +24,7 @@
     <% if @q.present? %>キーワード「<%= @q %>」<% end %>
 
         <% if @selected_tag.present? %>
-      / <%= link_to "##{@selected_tag.name}", memos_path(tag_id: @selected_tag.id, q: @q.presence) %>
+      / <%= link_to "#{@selected_tag.name}", memos_path(tag_id: @selected_tag.id, q: @q.presence) %>
     <% elsif @tag_id.present? %>
       / タグ（削除済み）
     <% end %>
@@ -38,7 +38,7 @@
     <div class="tag-grid">
       <% @tags.each do |tag| %>
         <div class="tag-item">
-          <%= link_to "##{tag.name}", memos_path(tag_id: tag.id, q: @q.presence) %>
+          <%= link_to "#{tag.name}", memos_path(tag_id: tag.id, q: @q.presence) %>
         </div>
       <% end %>
     </div>

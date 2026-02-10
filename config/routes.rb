@@ -6,10 +6,10 @@ Rails.application.routes.draw do
     root to: "memos#index", as: :authenticated_root
   end
 
-  # 未ログイン時のトップページ（説明LP）
+  # 未ログイン時のトップページ
   root to: "pages#home"
 
-  # メモ（showは使わない想定）
+  # メモ
   resources :memos, except: [:show]
 
   # フッター
