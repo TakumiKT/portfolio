@@ -3,6 +3,10 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def after_sign_in_path_for(resource)
+    memos_path
+  end
+  
   def configure_permitted_parameters
     # 新規登録時に name を許可
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
