@@ -1,0 +1,8 @@
+<h1>メモ（詳細・編集）</h1>
+
+<%= form_with model: @memo do |f| %>
+  <%= render "form", f: f, memo: @memo %>
+<% end %>
+
+<%= link_to "一覧へ戻る", memos_path %> |
+<%= link_to "削除", memo_path(@memo), data: { turbo_method: :delete, turbo_confirm: "削除しますか？" } %>
