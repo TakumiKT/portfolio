@@ -26,7 +26,7 @@ RSpec.describe "Memos", type: :request do
           symptom: "頭痛",
           concern_point: "いつから",
           check_point: "持病",
-          judgement: "重篤兆候なし",
+          judgment: "重篤兆候なし",
           suggestion: "市販薬検討"
         }
       }
