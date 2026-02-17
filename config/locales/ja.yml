@@ -1,0 +1,6 @@
+ja:
+  flash:
+    memo:
+      created: "メモを作成しました"
+      updated: "メモを更新しました"
+      destroyed: "メモを削除しました"
