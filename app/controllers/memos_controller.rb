@@ -1,6 +1,6 @@
 class MemosController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_memo, only: [:edit, :update, :destroy]
+  before_action :set_memo, only: [ :edit, :update, :destroy ]
 
 def index
   @q = params[:q].to_s.strip
@@ -28,7 +28,6 @@ def index
       .where(memos: { user_id: current_user.id })
       .distinct
       .order(:name)
-
 end
 
   # タグで絞り込み（ANDで追加）

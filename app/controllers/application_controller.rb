@@ -6,15 +6,15 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     memos_path
   end
-  
+
   def configure_permitted_parameters
     # 新規登録時に name を許可
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :name ])
 
     # アカウント編集時にも name を許可
-    devise_parameter_sanitizer.permit(:account_update, keys: [:name])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :name ])
     # ユーザーアイコン
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :avatar])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :avatar])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :name, :avatar ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :name, :avatar ])
   end
 end

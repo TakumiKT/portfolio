@@ -1,6 +1,5 @@
-  # 検索（q + tag_id 併用）テスト
 require "rails_helper"
-
+# 検索 q + tag_id 併用テスト
 RSpec.describe "Memos search", type: :request do
   let(:user) { create(:user) }
 

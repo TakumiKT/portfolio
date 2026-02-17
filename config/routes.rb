@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   # メモ
-  resources :memos, except: [:show]
+  resources :memos, except: [ :show ]
 
   # フッター
   get "/terms",   to: "pages#terms"
