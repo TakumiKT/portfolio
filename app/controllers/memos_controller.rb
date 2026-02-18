@@ -1,6 +1,6 @@
 class MemosController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_memo, only: [:edit, :update, :destroy]
+  before_action :set_memo, only: [ :edit, :update, :destroy ]
 
 def index
   @q = params[:q].to_s.strip
@@ -28,7 +28,6 @@ def index
       .where(memos: { user_id: current_user.id })
       .distinct
       .order(:name)
-
 end
 
   # タグで絞り込み（ANDで追加）
@@ -44,7 +43,7 @@ end
     @memo = current_user.memos.build(memo_params.except(:tag_names))
     if @memo.save
       save_tags(@memo, memo_params[:tag_names])
-      redirect_to memos_path, notice: "メモを作成しました"
+      redirect_to memos_path, notice: t("flash.memo.created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -57,7 +56,7 @@ end
   def update
     if @memo.update(memo_params.except(:tag_names))
       save_tags(@memo, memo_params[:tag_names])
-      redirect_to memos_path, notice: "メモを更新しました"
+      redirect_to memos_path, notice: t("flash.memo.updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -65,7 +64,7 @@ end
 
   def destroy
     @memo.destroy
-    redirect_to memos_path, notice: "メモを削除しました"
+    redirect_to memos_path, notice: t("flash.memo.destroyed")
   end
 
 private
