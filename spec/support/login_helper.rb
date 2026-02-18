@@ -1,5 +1,5 @@
 module LoginHelper
-  def login_as(user, password: "password")
-    post user_session_path, params: { user: { email: user.email, password: "password" } }
+  def login_as(user, scope: :user, **_kwargs)
+    sign_in(user, scope: scope)
   end
 end
