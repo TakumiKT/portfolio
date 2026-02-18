@@ -26,7 +26,7 @@ RSpec.describe "Memos", type: :request do
           symptom: "頭痛",
           concern_point: "いつから",
           check_point: "持病",
-          judgment: "重篤兆候なし",
+          judgment: "重篤兆候なし"
         }
       }
 
@@ -56,7 +56,7 @@ RSpec.describe "Memos", type: :request do
 
       patch memo_path(memo), params: { memo: { symptom: "不正変更" } }
 
-      # ここは実装によって期待値が変わるので、あなたの実装に寄せて選ぶ：
+      # ここは実装によって期待値が変わるので実装に寄せて選ぶ：
       # - 404にするなら:
       # expect(response).to have_http_status(:not_found)
       # - 一覧へリダイレクトなら:

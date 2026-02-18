@@ -23,8 +23,9 @@ RSpec.configure do |config|
   # Devise helpers
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include LoginHelper, type: :request
-
+  config.infer_spec_type_from_file_location!
   config.fixture_paths = [
+
     Rails.root.join("spec/fixtures")
   ]
 

@@ -1,5 +1,5 @@
 module LoginHelper
-  def login_as(user, scope: :user, **_kwargs)
-    sign_in(user, scope: scope)
+  def sign_in_as(user)
+    sign_in user
   end
 end
