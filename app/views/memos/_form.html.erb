@@ -1,6 +1,7 @@
 <% if memo.errors.any? %>
-  <div>
-    <ul>
+  <div class="alert alert--error">
+    <div class="alert__title">入力内容を確認してください</div>
+    <ul class="alert__list">
       <% memo.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
@@ -8,36 +9,103 @@
   </div>
 <% end %>
 
-<div>
-  <%= f.label :symptom, "相談内容・症状" %><br>
-  <%= f.text_area :symptom, rows: 3 %>
-</div>
+<section class="form-card">
+  <div class="form-card__head">
+    <h2 class="form-card__title">接客メモ</h2>
+    <p class="form-card__desc note">
+      接客時の思考プロセスに沿って記録します。後から見返したときに判断の根拠が追える形を目指します。
+    </p>
+  </div>
 
-<div>
-  <%= f.label :check_point, "接客時に確認したポイント" %><br>
-  <%= f.text_area :check_point, rows: 3 %>
-</div>
+  <div class="form-steps">
+    <div class="form-step">
+      <div class="form-step__meta">
+        <div class="form-step__badge">Step 1</div>
+        <div class="form-step__heading">
+          <div class="form-step__title">相談内容・症状</div>
+          <div class="form-step__hint">主訴・いつから・どんな様子かを短く整理</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <%= f.label :symptom, "相談内容・症状", class: "form-field__label" %>
+        <%= f.text_area :symptom, rows: 4, class: "form-field__textarea", placeholder: "例：頭痛。昨日から。ズキズキ。発熱なし。市販薬の希望。" %>
+      </div>
+    </div>
 
-<div>
-  <%= f.label :judgment, "自分の判断・対応内容" %><br>
-  <%= f.text_area :judgment, rows: 3 %>
-</div>
+    <div class="form-step">
+      <div class="form-step__meta">
+        <div class="form-step__badge">Step 2</div>
+        <div class="form-step__heading">
+          <div class="form-step__title">接客時に確認したポイント</div>
+          <div class="form-step__hint">妊娠授乳・持病・服薬・禁忌・受診勧奨の赤旗など</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <%= f.label :check_point, "接客時に確認したポイント", class: "form-field__label" %>
+        <%= f.text_area :check_point, rows: 4, class: "form-field__textarea", placeholder: "例：妊娠授乳なし／持病なし／服薬なし／他症状：吐き気なし…など" %>
+      </div>
+    </div>
 
-<div>
-  <%= f.label :concern_point, "注意点・迷った点（任意）" %><br>
-  <%= f.text_area :concern_point, rows: 3 %>
-</div>
+    <div class="form-step">
+      <div class="form-step__meta">
+        <div class="form-step__badge">Step 3</div>
+        <div class="form-step__heading">
+          <div class="form-step__title">自分の判断・対応内容</div>
+          <div class="form-step__hint">提案した薬・理由・注意事項・受診案内の要否</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <%= f.label :judgment, "自分の判断・対応内容", class: "form-field__label" %>
+        <%= f.text_area :judgment, rows: 4, class: "form-field__textarea", placeholder: "例：鎮痛薬Aを提案。胃への負担を説明。改善なければ受診案内。" %>
+      </div>
+    </div>
 
-<div>
-  <%= f.label :reflection, "振り返り・改善点（任意）" %><br>
-  <%= f.text_area :reflection, rows: 3 %>
-</div>
+    <div class="form-step form-step--optional">
+      <div class="form-step__meta">
+        <div class="form-step__badge">任意</div>
+        <div class="form-step__heading">
+          <div class="form-step__title">注意点・迷った点</div>
+          <div class="form-step__hint">判断に迷った理由／確認不足だった点</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <%= f.label :concern_point, "注意点・迷った点（任意）", class: "form-field__label" %>
+        <%= f.text_area :concern_point, rows: 3, class: "form-field__textarea", placeholder: "例：年齢・既往歴の聞き取りが浅かったかも" %>
+      </div>
+    </div>
 
-<div>
-  <%= f.label :tag_names, "タグ（カンマ区切り）" %><br>
-  <%= f.text_field :tag_names, value: memo.tag_names, placeholder: "例：かぜ, 小児, 禁忌確認" %>
-</div>
+    <div class="form-step form-step--optional">
+      <div class="form-step__meta">
+        <div class="form-step__badge">任意</div>
+        <div class="form-step__heading">
+          <div class="form-step__title">振り返り・改善点</div>
+          <div class="form-step__hint">次回の改善アクションを一言で</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <%= f.label :reflection, "振り返り・改善点（任意）", class: "form-field__label" %>
+        <%= f.text_area :reflection, rows: 3, class: "form-field__textarea", placeholder: "例：受診勧奨の判断基準を再確認する" %>
+      </div>
+    </div>
 
-<div>
-  <%= f.submit %>
-</div>
+    <div class="form-step">
+      <div class="form-step__meta">
+        <div class="form-step__badge">タグ</div>
+        <div class="form-step__heading">
+          <div class="form-step__title">タグ（カンマ区切り）</div>
+          <div class="form-step__hint">後から検索しやすいキーワードを付与</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <%= f.label :tag_names, "タグ（カンマ区切り）", class: "form-field__label" %>
+        <%= f.text_field :tag_names, value: memo.tag_names, class: "form-field__input", placeholder: "例：かぜ, 小児, 禁忌確認" %>
+        <p class="form-field__help note">例：スペースは不要。タグは後からメモ一覧で絞り込みできます。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit memo.persisted? ? "更新する" : "作成する", class: "btn btn--primary" %>
+    <%= link_to "戻る", memos_path, class: "btn btn--sub" %>
+  </div>
+</section>

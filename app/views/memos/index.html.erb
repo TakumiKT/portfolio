@@ -1,68 +1,97 @@
-<div class="card">
-<h1>接客メモ一覧</h1>
+<div class="container">
+  <section class="card">
+    <div class="page-head">
+      <h1 class="page-title">接客メモ一覧</h1>
+      <div class="index-actions">
+        <%= link_to "新規メモを作成", new_memo_path, class: "btn btn--primary" %>
+      </div>
+    </div>
 
-<%= link_to "新規メモを作成", new_memo_path %>
+  <%= form_with url: memos_path, method: :get, local: true, class: "search-form" do |f| %>
+    <div class="search-form__row">
+      <%= f.text_field :q,
+            value: @q,
+            placeholder: "キーワード（症状・判断内容など）",
+            class: "search-form__input" %>
 
-<%= form_with url: memos_path, method: :get, local: true do |f| %>
-  <%= f.text_field :q, value: @q, placeholder: "キーワード（症状・判断内容など）" %>
+      <%# すでにタグで絞り込み中なら、検索してもタグ条件を維持 %>
+      <% if @tag_id.present? %>
+        <%= hidden_field_tag :tag_id, @tag_id %>
+      <% end %>
 
-  <%# すでにタグで絞り込み中なら、検索してもタグ条件を維持 %>
-  <% if @tag_id.present? %>
-    <%= hidden_field_tag :tag_id, @tag_id %>
+      <div class="search-form__actions">
+        <%= f.submit "検索", class: "btn btn--primary" %>
+        <%= link_to "クリア", memos_path, class: "btn btn--sub" %>
+      </div>
+    </div>
   <% end %>
 
-  <%= f.submit "検索" %>
+    <%# 条件チップ（見た目が整う） %>
+    <% if @q.present? || @tag_id.present? %>
+      <div class="conditions">
+        <span class="conditions__label">条件：</span>
 
-  <%# 条件リセット %>
-  <%= link_to "クリア", memos_path %>
-  </div>
-<% end %>
-
-<% if @q.present? || @tag_id.present? %>
-  <p>
-    条件：
-    <% if @q.present? %>キーワード「<%= @q %>」<% end %>
+        <% if @q.present? %>
+          <span class="chip">
+            キーワード：<%= @q %>
+            <%= link_to "×", memos_path(tag_id: @tag_id.presence), class: "chip__x" %>
+          </span>
+        <% end %>
 
         <% if @selected_tag.present? %>
-      / <%= link_to "#{@selected_tag.name}", memos_path(tag_id: @selected_tag.id, q: @q.presence) %>
-    <% elsif @tag_id.present? %>
-      / タグ（削除済み）
+          <span class="chip">
+            タグ：#<%= @selected_tag.name %>
+            <%= link_to "×", memos_path(q: @q.presence), class: "chip__x" %>
+          </span>
+        <% elsif @tag_id.present? %>
+          <span class="chip chip--muted">タグ：（削除済み）</span>
+        <% end %>
+      </div>
     <% end %>
-  </p>
-<% end %>
 
-<% if @tags.any? %>
-  <section>
-    <p>タグ一覧：</p>
-
-    <div class="tag-grid">
-      <% @tags.each do |tag| %>
-        <div class="tag-item">
-          <%= link_to "#{tag.name}", memos_path(tag_id: tag.id, q: @q.presence) %>
+    <%# タグ一覧 %>
+    <% if @tags.any? %>
+      <div class="tag-section">
+        <div class="tag-section__title">タグ一覧</div>
+        <div class="tag-grid">
+          <% @tags.each do |tag| %>
+            <div class="tag-item">
+              <%= link_to "##{tag.name}", memos_path(tag_id: tag.id, q: @q.presence) %>
+            </div>
+          <% end %>
         </div>
+      </div>
+    <% end %>
+  </section>
+
+  <% if @memos.empty? %>
+    <section class="card">
+      <p class="empty-state">まだメモがありません。まずは1件作成してみましょう。</p>
+    </section>
+  <% else %>
+    <div class="memo-list">
+      <% @memos.each do |memo| %>
+        <article class="memo-card">
+          <div class="memo-card__head">
+            <div class="memo-card__date"><%= memo.created_at.strftime("%Y/%m/%d") %></div>
+            <%= link_to "開く", edit_memo_path(memo), class: "btn btn--sub" %>
+          </div>
+
+          <div class="memo-card__symptom"><%= truncate(memo.symptom, length: 40) %></div>
+
+          <% if memo.judgment.present? %>
+            <div class="memo-card__sub">判断：<%= truncate(memo.judgment, length: 40) %></div>
+          <% end %>
+
+          <% if memo.tags.any? %>
+            <div class="memo-card__tags">
+              <% memo.tags.each do |tag| %>
+                <%= link_to "##{tag.name}", memos_path(tag_id: tag.id, q: @q.presence), class: "tag-link" %>
+              <% end %>
+            </div>
+          <% end %>
+        </article>
       <% end %>
     </div>
-  </section>
-<% end %>
-
-<% if @memos.empty? %>
-  <p>まだメモがありません。まずは1件作成してみましょう。</p>
-<% else %>
-  <ul>
-    <% @memos.each do |memo| %>
-      <li>
-        <strong><%= memo.created_at.strftime("%Y/%m/%d") %></strong>
-        <%= truncate(memo.symptom, length: 40) %>
-        <%= link_to "開く", edit_memo_path(memo) %>
-
-        <% if memo.tags.any? %>
-          <div>
-            <% memo.tags.each do |tag| %>
-              <%= link_to "##{tag.name}", memos_path(tag_id: tag.id, q: @q.presence) %>
-            <% end %>
-          </div>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
+  <% end %>
+</div>

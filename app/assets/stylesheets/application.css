@@ -96,7 +96,7 @@ body {
 .tag-item a {
   display: inline-block;
   padding: 6px 10px;
-  background-color: #cdf1bf;
+  background-color: #e8eee7;
   border: 1px solid #3e41ee;
   border-radius: 9999px;
   text-decoration: none;
@@ -145,4 +145,337 @@ body {
 
 .app-footer__copy {
   color: #666;
+}
+
+.page-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.btn--primary {
+  border: 1px solid #3e41ee;
+  background: #ffffff;
+}
+
+.search-form {
+  margin-top: 12px;
+}
+
+.search-form__row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-form__input {
+  flex: 1;
+  min-width: 240px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.conditions {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.conditions__label {
+  color: #333;
+  font-size: 0.9em;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 9999px;
+  background: #fff;
+  font-size: 0.9em;
+}
+
+.chip--muted {
+  opacity: 0.7;
+}
+
+.chip__x {
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 9999px;
+  padding: 0 8px;
+  line-height: 1.4;
+}
+
+.tag-section {
+  margin-top: 16px;
+}
+
+.tag-section__title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.memo-list {
+  display: grid;
+  gap: 12px;
+}
+
+.memo-card {
+  background: #cad0eb;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.memo-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.memo-card__date {
+  color: #333;
+  font-size: 0.9em;
+}
+
+.memo-card__symptom {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.memo-card__sub {
+  margin-top: 6px;
+  font-size: 0.95em;
+}
+
+.memo-card__tags {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag-link {
+  display: inline-block;
+  padding: 6px 10px;
+  background-color: #cdf1bf;
+  border: 1px solid #3e41ee;
+  border-radius: 9999px;
+  text-decoration: none;
+}
+
+.empty-state {
+  margin: 0;
+}
+
+.alert {
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+.alert--error {
+  border-color: #e57373;
+  background: #fff5f5;
+}
+
+.alert__title {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.alert__list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.form-card {
+  background: #cad0eb;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.form-card__head {
+  margin-bottom: 12px;
+}
+
+.form-card__title {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.form-card__desc {
+  margin: 0;
+}
+
+.form-steps {
+  display: grid;
+  gap: 12px;
+}
+
+.form-step {
+  background: rgba(255,255,255,0.55);
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.form-step--optional {
+  opacity: 0.95;
+}
+
+.form-step__meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.form-step__badge {
+  min-width: 64px;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-size: 0.85em;
+}
+
+.form-step__title {
+  font-weight: bold;
+}
+
+.form-step__hint {
+  margin-top: 2px;
+  color: #333;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+.form-field__label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.form-field__textarea,
+.form-field__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.form-field__help {
+  margin: 6px 0 0;
+}
+
+.form-actions {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ===== new/edit ページ見出し ===== */
+
+.page-head {
+  margin-bottom: 12px;
+}
+
+.page-head--with-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.page-title {
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+
+.page-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* 危険ボタン */
+.btn--danger {
+  border: 1px solid #d9534f;
+  background: #fff;
+  color: #d9534f;
+}
+
+/* 一覧上部のアクション（新規作成ボタン置き場） */
+.index-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: 8px 0 12px;
+}
+
+.btn--primary {
+  background: #4b6cb7;
+  border-color: #4b6cb7;
+  color: #fff;
+}
+
+/* 検索フォーム */
+.search-form__row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-form__input {
+  flex: 1;
+  min-width: 240px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.search-form__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn--primary {
+  background: #4b6cb7;
+  border-color: #4b6cb7;
+  color: #fff;
+}
+
+/* スマホでボタンが詰まらないように */
+@media (max-width: 600px) {
+  .search-form__actions {
+    width: 100%;
+  }
+  .search-form__actions .btn {
+    flex: 1;
+    text-align: center;
+  }
 }
