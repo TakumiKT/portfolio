@@ -1,11 +1,10 @@
-  <footer class="app-footer">
-    <div class="container app-footer__inner">
-      <nav class="app-footer__links">
-        <%= link_to "利用規約", terms_path %>
-        <%= link_to "プライバシーポリシー", privacy_path %>
-        <%= link_to "お問い合わせ", contact_path %>
-      </nav>
-
-      <small class="app-footer__copy">© <%= Time.current.year %> App</small>
+<footer class="app-footer app-footer--fixed">
+  <div class="container app-footer__inner">
+    <div class="app-footer__links">
+      <%= link_to "利用規約", terms_path %>
+      <%= link_to "プライバシーポリシー", privacy_path %>
+      <%= link_to "お問い合わせ", contact_path %>
     </div>
-  </footer>
+    <div class="app-footer__copy">© MEMOTC</div>
+  </div>
+</footer>

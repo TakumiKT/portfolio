@@ -479,3 +479,31 @@ body {
     text-align: center;
   }
 }
+
+/* 固定フッターバナー */
+.app-footer--fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+
+  /* 上に影をつける*/
+  box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* 固定フッターの高さ分だけ、本文の下に余白を足す */
+.app-main {
+  padding-bottom: 90px; /* ←フッターの高さに合わせて調整 */
+}
+
+/* スマホ向けの折り返し対応 */
+.app-footer__inner {
+  flex-wrap: wrap;
+}
+
+.app-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
