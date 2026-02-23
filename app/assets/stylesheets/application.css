@@ -507,3 +507,234 @@ body {
   flex-wrap: wrap;
   gap: 10px;
 }
+
+/* 認証フォーム */
+.auth-card {
+  background: #cad0eb;          /* cardと合わせる */
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 520px;
+  margin: 24px auto;
+}
+
+.auth-title {
+  margin: 0 0 16px;
+  font-size: 1.4rem;
+}
+
+.auth-form .auth-field {
+  margin-bottom: 12px;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.auth-actions {
+  margin-top: 14px;
+}
+
+/* 既存btnに追加：主ボタン */
+.btn--primary {
+  background: #3e41ee;
+  border: 1px solid #3e41ee;
+  color: #fff;
+}
+
+.auth-links {
+  margin-top: 14px;
+}
+
+.text-link {
+  text-decoration: none;
+}
+.text-link:hover {
+  text-decoration: underline;
+}
+
+/* エラーメッセージ枠 */
+.auth-errors {
+  background: #fff;
+  border: 1px solid #e5a3a3;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+.auth-errors ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* 認証画面共通 */
+.auth-card {
+  max-width: 520px;
+  margin: 24px auto;
+  background: #cad0eb;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.auth-title {
+  margin: 0 0 12px 0;
+}
+
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.auth-field {
+  margin-bottom: 12px;
+}
+
+.auth-field label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* remember_me を横並びに */
+.auth-field--inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.auth-field--inline label {
+  margin: 0;
+}
+
+/* ボタン位置 */
+.auth-actions {
+  margin-top: 12px;
+}
+
+/* エラー表示 */
+.auth-errors {
+  background: #fff;
+  border: 1px solid #e5a3a3;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+.auth-errors ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* 既存 .btn に primary を追加 */
+.btn--primary {
+  background: #3e41ee;
+  border: 1px solid #3e41ee;
+  color: #fff;
+}
+
+/* 新規登録/パスワードをお忘れの方 */
+.auth-link {
+  display: inline-block;
+  margin-top: 8px;
+  text-decoration: none;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+/* ユーザー情報編集 */
+.auth-label {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.auth-input {
+  width: 100%;
+  max-width: 520px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  box-sizing: border-box;
+}
+
+.auth-file {
+  width: 100%;
+  max-width: 520px;
+}
+
+.help-text {
+  margin: 6px 0 0;
+  font-size: 0.9em;
+  color: #333;
+  opacity: 0.85;
+}
+
+.avatar-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.avatar-preview {
+  width: 88px;
+  height: 88px;
+  display: grid;
+  place-items: center;
+}
+
+.avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.auth-actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.auth-divider {
+  margin: 22px 0;
+  border: none;
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+/* 危険操作 */
+.btn--danger {
+  background: #fff;
+  border: 1px solid #cc3a3a;
+  color: #b30000;
+}
+
+.danger-zone {
+  padding: 12px;
+  border: 1px solid rgba(204,58,58,0.25);
+  border-radius: 10px;
+  background: rgba(204,58,58,0.06);
+}
+
+.danger-title {
+  margin: 0 0 8px;
+}

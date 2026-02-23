@@ -43,8 +43,9 @@ end
     @memo = current_user.memos.build(memo_params.except(:tag_names))
     if @memo.save
       save_tags(@memo, memo_params[:tag_names])
-      redirect_to memos_path, notice: t("flash.memo.created")
+      redirect_to memos_path, notice: t("flash.memos.create.success")
     else
+      flash.now[:alert] = t("flash.memos.create.failure")
       render :new, status: :unprocessable_entity
     end
   end
