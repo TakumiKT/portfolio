@@ -18,7 +18,7 @@
             width: 40,
             height: 40
           ) %>
-      <span class="app-header__username"><%= current_user.name %></span>
+      <span class="app-header__username"><%= current_user.name.presence || "ユーザー" %></span>
     <% end %>
       <% else %>
         <%= link_to "新規登録", new_user_registration_path, class: "app-header__link" %>
