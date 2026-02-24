@@ -1,0 +1,16 @@
+<div class="page-head page-head--with-actions">
+  <div>
+    <h1 class="page-title">メモ（詳細・編集）</h1>
+    <p class="note">内容を更新できます。不要になったメモは削除できます。</p>
+  </div>
+
+  <div class="page-actions">
+    <%= link_to "削除", memo_path(@memo),
+          class: "btn btn--danger",
+          data: { turbo_method: :delete, turbo_confirm: "削除しますか？" } %>
+  </div>
+</div>
+
+<%= form_with model: @memo do |f| %>
+  <%= render "form", f: f, memo: @memo %>
+<% end %>

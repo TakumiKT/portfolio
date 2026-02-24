@@ -1,10 +1,786 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+.btn {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  background: #ffffff;
+  border: 1px solid #ccc;
+}
+
+.btn--sub {
+  margin-left: 8px;
+  background: #ffffff;
+}
+.note {
+  color: #000000;
+  font-size: 0.9em;
+}
+
+/* ヘッダー */
+.app-header {
+  background-color: #c8d4ec;
+  border-bottom: 1px solid #ddd;
+}
+
+.app-header__brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.app-header__logo {
+  height: 28px; 
+  width: auto;
+  display: block;
+}
+
+.app-header__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+}
+
+.app-header__link {
+  color: #333;
+  text-decoration: none;
+  margin-left: 12px;
+}
+
+.app-header__link:hover {
+  text-decoration: underline;
+}
+
+.app-header__logo {
+  color: #111;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.app-header__avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-left: 12px;
+}
+
+/* 全体 */
+body {
+  margin: 0;
+  color: #222;
+  background-color:#FFF3E3;
+}
+
+/* 本文エリア */
+.app-main {
+  padding: 24px 0;
+  min-height: calc(100vh - 120px); 
+}
+
+/* 画面の横幅 */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.card {
+  background: #cad0eb;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+/* タグ */
+.tag-item a {
+  display: inline-block;
+  padding: 6px 10px;
+  background-color: #e8eee7;
+  border: 1px solid #3e41ee;
+  border-radius: 9999px;
+  text-decoration: none;
+}
+
+.tag-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 900px) {
+  .tag-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .tag-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* フッター */
+.app-footer {
+  border-top: 1px solid #e5e5e5;
+  background: #c8d4ec;
+  padding: 16px 0;
+}
+
+.app-footer__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-footer__links a {
+  color: #333;
+  text-decoration: none;
+  margin-right: 12px;
+}
+
+.app-footer__links a:hover {
+  text-decoration: underline;
+}
+
+.app-footer__copy {
+  color: #666;
+}
+
+.page-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.btn--primary {
+  border: 1px solid #3e41ee;
+  background: #ffffff;
+}
+
+.search-form {
+  margin-top: 12px;
+}
+
+.search-form__row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-form__input {
+  flex: 1;
+  min-width: 240px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.conditions {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.conditions__label {
+  color: #333;
+  font-size: 0.9em;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 9999px;
+  background: #fff;
+  font-size: 0.9em;
+}
+
+.chip--muted {
+  opacity: 0.7;
+}
+
+.chip__x {
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 9999px;
+  padding: 0 8px;
+  line-height: 1.4;
+}
+
+.tag-section {
+  margin-top: 16px;
+}
+
+.tag-section__title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.memo-list {
+  display: grid;
+  gap: 12px;
+}
+
+.memo-card {
+  background: #cad0eb;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.memo-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.memo-card__date {
+  color: #333;
+  font-size: 0.9em;
+}
+
+.memo-card__symptom {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.memo-card__sub {
+  margin-top: 6px;
+  font-size: 0.95em;
+}
+
+.memo-card__tags {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag-link {
+  display: inline-block;
+  padding: 6px 10px;
+  background-color: #cdf1bf;
+  border: 1px solid #3e41ee;
+  border-radius: 9999px;
+  text-decoration: none;
+}
+
+.empty-state {
+  margin: 0;
+}
+
+.alert {
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+.alert--error {
+  border-color: #e57373;
+  background: #fff5f5;
+}
+
+.alert__title {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.alert__list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.form-card {
+  background: #cad0eb;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.form-card__head {
+  margin-bottom: 12px;
+}
+
+.form-card__title {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.form-card__desc {
+  margin: 0;
+}
+
+.form-steps {
+  display: grid;
+  gap: 12px;
+}
+
+.form-step {
+  background: rgba(255,255,255,0.55);
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.form-step--optional {
+  opacity: 0.95;
+}
+
+.form-step__meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.form-step__badge {
+  min-width: 64px;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-size: 0.85em;
+}
+
+.form-step__title {
+  font-weight: bold;
+}
+
+.form-step__hint {
+  margin-top: 2px;
+  color: #333;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+.form-field__label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.form-field__textarea,
+.form-field__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.form-field__help {
+  margin: 6px 0 0;
+}
+
+.form-actions {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ===== new/edit ページ見出し ===== */
+
+.page-head {
+  margin-bottom: 12px;
+}
+
+.page-head--with-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.page-title {
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+
+.page-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* 危険ボタン */
+.btn--danger {
+  border: 1px solid #d9534f;
+  background: #fff;
+  color: #d9534f;
+}
+
+/* 一覧上部のアクション（新規作成ボタン置き場） */
+.index-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: 8px 0 12px;
+}
+
+.btn--primary {
+  background: #4b6cb7;
+  border-color: #4b6cb7;
+  color: #fff;
+}
+
+/* 検索フォーム */
+.search-form__row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-form__input {
+  flex: 1;
+  min-width: 240px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.search-form__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn--primary {
+  background: #4b6cb7;
+  border-color: #4b6cb7;
+  color: #fff;
+}
+
+/* スマホでボタンが詰まらないように */
+@media (max-width: 600px) {
+  .search-form__actions {
+    width: 100%;
+  }
+  .search-form__actions .btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* 固定フッターバナー */
+.app-footer--fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+
+  /* 上に影をつける*/
+  box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* 固定フッターの高さ分だけ、本文の下に余白を足す */
+.app-main {
+  padding-bottom: 90px; /* ←フッターの高さに合わせて調整 */
+}
+
+/* スマホ向けの折り返し対応 */
+.app-footer__inner {
+  flex-wrap: wrap;
+}
+
+.app-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 認証フォーム */
+.auth-card {
+  background: #cad0eb;          /* cardと合わせる */
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 520px;
+  margin: 24px auto;
+}
+
+.auth-title {
+  margin: 0 0 16px;
+  font-size: 1.4rem;
+}
+
+.auth-form .auth-field {
+  margin-bottom: 12px;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.auth-actions {
+  margin-top: 14px;
+}
+
+/* 既存btnに追加：主ボタン */
+.btn--primary {
+  background: #3e41ee;
+  border: 1px solid #3e41ee;
+  color: #fff;
+}
+
+.auth-links {
+  margin-top: 14px;
+}
+
+.text-link {
+  text-decoration: none;
+}
+.text-link:hover {
+  text-decoration: underline;
+}
+
+/* エラーメッセージ枠 */
+.auth-errors {
+  background: #fff;
+  border: 1px solid #e5a3a3;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+.auth-errors ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* 認証画面共通 */
+.auth-card {
+  max-width: 520px;
+  margin: 24px auto;
+  background: #cad0eb;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.auth-title {
+  margin: 0 0 12px 0;
+}
+
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.auth-field {
+  margin-bottom: 12px;
+}
+
+.auth-field label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* remember_me を横並びに */
+.auth-field--inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.auth-field--inline label {
+  margin: 0;
+}
+
+/* ボタン位置 */
+.auth-actions {
+  margin-top: 12px;
+}
+
+/* エラー表示 */
+.auth-errors {
+  background: #fff;
+  border: 1px solid #e5a3a3;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+.auth-errors ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* 既存 .btn に primary を追加 */
+.btn--primary {
+  background: #3e41ee;
+  border: 1px solid #3e41ee;
+  color: #fff;
+}
+
+/* 新規登録/パスワードをお忘れの方 */
+.auth-link {
+  display: inline-block;
+  margin-top: 8px;
+  text-decoration: none;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+/* ユーザー情報編集 */
+.auth-label {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.auth-input {
+  width: 100%;
+  max-width: 520px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  box-sizing: border-box;
+}
+
+.auth-file {
+  width: 100%;
+  max-width: 520px;
+}
+
+.help-text {
+  margin: 6px 0 0;
+  font-size: 0.9em;
+  color: #333;
+  opacity: 0.85;
+}
+
+.avatar-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.avatar-preview {
+  width: 88px;
+  height: 88px;
+  display: grid;
+  place-items: center;
+}
+
+.avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.auth-actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.auth-divider {
+  margin: 22px 0;
+  border: none;
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+/* 危険操作 */
+.btn--danger {
+  background: #fff;
+  border: 1px solid #cc3a3a;
+  color: #b30000;
+}
+
+.danger-zone {
+  padding: 12px;
+  border: 1px solid rgba(204,58,58,0.25);
+  border-radius: 10px;
+  background: rgba(204,58,58,0.06);
+}
+
+.danger-title {
+  margin: 0 0 8px;
+}
+
+/* ユーザー（アイコン＋名前） */
+.app-header__user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  margin-left: 12px;
+}
+
+.app-header__username {
+  font-size: 12px;
+  color: #333;
+  line-height: 1;
+  max-width: 90px;          /* 長い名前対策 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* button_to が生成する form の余白対策 */
+.memo-card__actions {
+  border-color: #888;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* お気に入りボタン */
+.favorite-btn {
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 9999px;
+  padding: 6px 10px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.favorite-btn--on {
+  border-color: #d1a800;
+}
+
+.favorite-btn:focus-visible {
+  outline: 2px solid #3e41ee;
+  outline-offset: 2px;
+}

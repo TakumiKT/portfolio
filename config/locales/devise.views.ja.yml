@@ -1,0 +1,9 @@
+ja:
+  devise:
+    registrations:
+      new:
+        title: "新規登録"
+        submit: "登録する"
+    shared:
+      links:
+        log_in: "ログイン"

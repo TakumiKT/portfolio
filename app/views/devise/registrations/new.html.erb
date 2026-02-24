@@ -1,0 +1,49 @@
+<h2><%= t("devise.registrations.new.title") %></h2>
+
+<div class="auth-card">
+  <h1 class="auth-title"><%= t("devise.registrations.new.title") %></h1>
+
+  <%= form_for(resource,
+               as: resource_name,
+               url: registration_path(resource_name),
+               html: { class: "auth-form" }) do |f| %>
+
+    <%# エラーメッセージ表示 %>
+    <% if resource.errors.any? %>
+      <div class="auth-errors">
+        <ul>
+          <% resource.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="auth-field">
+      <%= f.label :name, "名前" %>
+      <%= f.text_field :name, autofocus: true, autocomplete: "name" %>
+    </div>
+
+    <div class="auth-field">
+      <%= f.label :email, "メールアドレス" %>
+      <%= f.email_field :email, autocomplete: "email" %>
+    </div>
+
+    <div class="auth-field">
+      <%= f.label :password, "パスワード" %>
+      <%= f.password_field :password, autocomplete: "new-password" %>
+    </div>
+
+    <div class="auth-field">
+      <%= f.label :password_confirmation, "パスワード（確認）" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+    </div>
+
+    <div class="auth-actions">
+      <%= f.submit t("devise.registrations.new.submit"), class: "btn btn--primary" %>
+    </div>
+  <% end %>
+
+  <div class="auth-links">
+    <%= render "devise/shared/links" %>
+  </div>

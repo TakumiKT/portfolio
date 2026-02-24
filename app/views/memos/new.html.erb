@@ -1,0 +1,8 @@
+<div class="page-head">
+  <h1 class="page-title">新規メモ</h1>
+  <p class="note">接客の流れに沿って記録しましょう（学習・振り返り用）。</p>
+</div>
+
+<%= form_with model: @memo do |f| %>
+  <%= render "form", f: f, memo: @memo %>
+<% end %>
