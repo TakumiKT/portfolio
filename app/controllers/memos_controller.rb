@@ -7,10 +7,17 @@ def index
   @tag_id = params[:tag_id]
   @selected_tag = current_user.tags.find_by(id: @tag_id) if @tag_id.present?
   @memos = current_user.memos.includes(:tags).order(created_at: :desc)
-
+  # N+1対策
+  @favorite_memo_ids = current_user.favorites.pluck(:memo_id)
+  
   # 絞り込み時にタグ名を表示
   if @tag_id.present?
     @memos = @memos.joins(:memo_tags).where(memo_tags: { tag_id: @tag_id })
+  end
+
+  # お気に入りのみ
+  if params[:favorites].present?
+    @memos = @memos.joins(:favorites).where(favorites: { user_id: current_user.id })
   end
 
   # キーワード検索（複数カラムを対象）

@@ -22,14 +22,29 @@
       <div class="search-form__actions">
         <%= f.submit "検索", class: "btn btn--primary" %>
         <%= link_to "クリア", memos_path, class: "btn btn--sub" %>
+
+        <!-- お気に入りソート -->
+        <% if params[:favorites].present? %>
+          <%= link_to "全て", memos_path(q: @q.presence, tag_id: @tag_id.presence), class: "btn btn--sub" %>
+        <% else %>
+          <%= link_to "お気に入り", memos_path(q: @q.presence, tag_id: @tag_id.presence, favorites: 1), class: "btn btn--sub" %>
+        <% end %>
       </div>
     </div>
   <% end %>
 
-    <%# 条件チップ（見た目が整う） %>
+    <%# 条件チップ（見た目を整える） %>
     <% if @q.present? || @tag_id.present? %>
       <div class="conditions">
         <span class="conditions__label">条件：</span>
+
+        <!-- お気に入りソート -->
+        <% if params[:favorites].present? %>
+          <span class="chip">
+            お気に入りのみ
+            <%= link_to "×", memos_path(q: @q.presence, tag_id: @tag_id.presence), class: "chip__x" %>
+          </span>
+        <% end %>
 
         <% if @q.present? %>
           <span class="chip">
@@ -74,7 +89,27 @@
         <article class="memo-card">
           <div class="memo-card__head">
             <div class="memo-card__date"><%= memo.created_at.strftime("%Y/%m/%d") %></div>
-            <%= link_to "開く", edit_memo_path(memo), class: "btn btn--sub" %>
+
+            <div class="memo-card__actions">
+              <!-- N+1対策 -->
+              <% favorited = @favorite_memo_ids.include?(memo.id) %>
+
+              <% if favorited %>
+                <%= button_to "★", memo_favorite_path(memo),
+                      method: :delete,
+                      class: "favorite-btn favorite-btn--on",
+                      form: { data: { turbo: true } },
+                      aria: { label: "お気に入り解除" } %>
+              <% else %>
+                <%= button_to "☆", memo_favorite_path(memo),
+                      method: :post,
+                      class: "favorite-btn",
+                      form: { data: { turbo: true } },
+                      aria: { label: "お気に入りに追加" } %>
+              <% end %>
+
+              <%= link_to "開く", edit_memo_path(memo), class: "btn btn--sub" %>
+            </div>
           </div>
 
           <div class="memo-card__symptom"><%= truncate(memo.symptom, length: 40) %></div>

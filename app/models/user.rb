@@ -4,5 +4,7 @@ class User < ApplicationRecord
 
   has_many :memos, dependent: :destroy
   has_many :tags, dependent: :destroy
+  has_many :favorites, dependent: :destroy
+  has_many :favorite_memos, through: :favorites, source: :memo
   has_one_attached :avatar
 end

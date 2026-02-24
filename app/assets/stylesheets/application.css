@@ -758,3 +758,29 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* button_to が生成する form の余白対策 */
+.memo-card__actions {
+  border-color: #888;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* お気に入りボタン */
+.favorite-btn {
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 9999px;
+  padding: 6px 10px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.favorite-btn--on {
+  border-color: #d1a800;
+}
+
+.favorite-btn:focus-visible {
+  outline: 2px solid #3e41ee;
+  outline-offset: 2px;
+}
