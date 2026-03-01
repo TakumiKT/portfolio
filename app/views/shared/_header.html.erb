@@ -8,19 +8,25 @@
       <%= link_to "新規メモ", new_memo_path, class: "app-header__link" %>
     </div>
 
-    <div class="app-header__right">
-      <% if user_signed_in? %>
-        <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "app-header__button" %>
+<div class="app-header__right">
+  <% if user_signed_in? %>
+    <div class="app-header__account">
+      <%= button_to "ログアウト",
+            destroy_user_session_path,
+            method: :delete,
+            class: "app-header__button" %>
 
-        <%= link_to edit_user_registration_path do %>
-          <%= image_tag(
-                current_user.avatar.attached? ?
-                  url_for(current_user.avatar.variant(resize_to_fill: [40, 40])) :
-                  asset_path("default_avatar.png"),
-                alt: "ユーザーアイコン",
-                class: "app-header__avatar"
-              ) %>
-        <% end %>
+      <%= link_to edit_user_registration_path, class: "app-header__user" do %>
+        <%= image_tag(
+              (current_user.avatar.attached? ? url_for(current_user.avatar.variant(resize_to_fill: [40, 40])) : asset_path("default_avatar.png")),
+              alt: "ユーザーアイコン",
+              class: "app-header__avatar",
+              width: 40,
+              height: 40
+            ) %>
+        <span class="app-header__username"><%= current_user.name.presence || "ユーザー" %></span>
+      <% end %>
+    </div>
       <% else %>
         <%= link_to "新規登録", new_user_registration_path, class: "app-header__link" %>
         <%= link_to "ログイン", new_user_session_path, class: "app-header__link" %>

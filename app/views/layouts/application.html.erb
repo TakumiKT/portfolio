@@ -23,6 +23,9 @@
     <%= render "shared/header" %>
 
     <main class="app-main">
+    <% flash.each do |type, message| %>
+ 
+    <% end %>
       <div class="container">
         <% if notice %><p class="flash flash--notice"><%= notice %></p><% end %>
         <% if alert  %><p class="flash flash--alert"><%= alert %></p><% end %>

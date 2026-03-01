@@ -22,31 +22,110 @@
       <div class="search-form__actions">
         <%= f.submit "検索", class: "btn btn--primary" %>
         <%= link_to "クリア", memos_path, class: "btn btn--sub" %>
+
+        <%# 状態フィルタボタン %>
+        <% if params[:drafts].present? %>
+         <%= link_to "清書", memos_path(q: @q.presence, tag_id: @tag_id.presence, favorites: params[:favorites].presence, published: 1), class: "btn btn--sub" %>
+        <% elsif params[:published].present? %>
+         <%= link_to "下書き", memos_path(q: @q.presence, tag_id: @tag_id.presence, favorites: params[:favorites].presence, drafts: 1), class: "btn btn--sub" %>
+        <% else %>
+         <%= link_to "下書き", memos_path(q: @q.presence, tag_id: @tag_id.presence, favorites: params[:favorites].presence, drafts: 1), class: "btn btn--sub" %>
+         <%= link_to "清書", memos_path(q: @q.presence, tag_id: @tag_id.presence, favorites: params[:favorites].presence, published: 1), class: "btn btn--sub" %>
+        <% end %>
+
+        <!-- お気に入りソート -->
+        <% if params[:favorites].present? %>
+          <%= link_to "全て", memos_path(q: @q.presence, tag_id: @tag_id.presence), class: "btn btn--sub" %>
+        <% else %>
+          <%= link_to "お気に入り", memos_path(q: @q.presence, tag_id: @tag_id.presence, favorites: 1), class: "btn btn--sub" %>
+        <% end %>
       </div>
     </div>
   <% end %>
 
-    <%# 条件チップ（見た目が整う） %>
-    <% if @q.present? || @tag_id.present? %>
-      <div class="conditions">
-        <span class="conditions__label">条件：</span>
+<%# 条件チップ（見た目を整える） %>
+<% if @q.present? || @tag_id.present? || params[:favorites].present? || params[:drafts].present? || params[:published].present? %>
+  <div class="conditions">
+    <span class="conditions__label">条件：</span>
 
-        <% if @q.present? %>
-          <span class="chip">
-            キーワード：<%= @q %>
-            <%= link_to "×", memos_path(tag_id: @tag_id.presence), class: "chip__x" %>
+    <%# お気に入りのみ %>
+    <% if params[:favorites].present? %>
+      <span class="chip">
+        お気に入りのみ
+        <%= link_to "×",
+              memos_path(
+                q: @q.presence,
+                tag_id: @tag_id.presence,
+                drafts: params[:drafts].presence,
+                published: params[:published].presence
+              ),
+              class: "chip__x" %>
+      </span>
+    <% end %>
+
+    <%# 状態フィルタ（下書きのみ / 清書のみ） %>
+    <% if params[:drafts].present? %>
+      <span class="chip chip--draft">
+        下書きのみ
+        <%= link_to "×",
+              memos_path(
+                 q: @q.presence,
+                 tag_id: @tag_id.presence,
+                 favorites: params[:favorites].presence
+                 ),
+                 class: "chip__x" %>
+          </span>
+        <% elsif params[:published].present? %>
+          <span class="chip chip--published">
+            清書のみ
+            <%= link_to "×",
+                  memos_path(
+                    q: @q.presence,
+                    tag_id: @tag_id.presence,
+                    favorites: params[:favorites].presence
+                    ),
+                    class: "chip__x" %>
+            </span>
+          <% end %>
+
+          <%# キーワード %>
+          <% if @q.present? %>
+           <span class="chip">
+             キーワード：<%= @q %>
+             <%= link_to "×",
+                   memos_path(
+                   tag_id: @tag_id.presence,
+                   favorites: params[:favorites].presence,
+                   drafts: params[:drafts].presence,
+                   published: params[:published].presence
+                   ),
+                  class: "chip__x" %>
           </span>
         <% end %>
 
+        <%# タグ %>
         <% if @selected_tag.present? %>
           <span class="chip">
             タグ：#<%= @selected_tag.name %>
-            <%= link_to "×", memos_path(q: @q.presence), class: "chip__x" %>
+            <%= link_to "×",
+                  memos_path(
+                    q: @q.presence,
+                    favorites: params[:favorites].presence,
+                    drafts: params[:drafts].presence,
+                    published: params[:published].presence
+                  ),
+                  class: "chip__x" %>
           </span>
         <% elsif @tag_id.present? %>
           <span class="chip chip--muted">タグ：（削除済み）</span>
         <% end %>
       </div>
+    <% end %>
+    <% if params[:drafts].present? %>
+      <span class="chip">
+        下書きのみ
+        <%= link_to "×", memos_path(q: @q.presence, tag_id: @tag_id.presence, favorites: params[:favorites].presence), class: "chip__x" %>
+      </span>
     <% end %>
 
     <%# タグ一覧 %>
@@ -73,8 +152,36 @@
       <% @memos.each do |memo| %>
         <article class="memo-card">
           <div class="memo-card__head">
-            <div class="memo-card__date"><%= memo.created_at.strftime("%Y/%m/%d") %></div>
-            <%= link_to "開く", edit_memo_path(memo), class: "btn btn--sub" %>
+            <div class="memo-card__left">
+              <div class="memo-card__date"><%= memo.created_at.strftime("%Y/%m/%d") %></div>
+              <div class="memo-card__badges">
+              <% if memo.draft? %>
+                <span class="chip chip--draft">下書き</span>
+              <% else %>
+                <span class="chip chip--published">清書</span>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="memo-card__actions">
+              <% favorited = @favorite_memo_ids.include?(memo.id) %>
+
+              <% if favorited %>
+                <%= button_to "★", memo_favorite_path(memo),
+                      method: :delete,
+                      class: "favorite-btn favorite-btn--on",
+                      form: { data: { turbo: true } },
+                      aria: { label: "お気に入り解除" } %>
+              <% else %>
+                <%= button_to "☆", memo_favorite_path(memo),
+                      method: :post,
+                      class: "favorite-btn",
+                      form: { data: { turbo: true } },
+                      aria: { label: "お気に入りに追加" } %>
+              <% end %>
+
+              <%= link_to "開く", edit_memo_path(memo), class: "btn btn--sub" %>
+            </div>
           </div>
 
           <div class="memo-card__symptom"><%= truncate(memo.symptom, length: 40) %></div>

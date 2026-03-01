@@ -4,8 +4,11 @@ class Memo < ApplicationRecord
   validates :symptom, :check_point, :judgment, presence: true
   has_many :memo_tags, dependent: :destroy
   has_many :tags, through: :memo_tags
+  has_many :favorites, dependent: :destroy
+  has_many :favorited_users, through: :favorites, source: :user
   attr_accessor :tag_names
-
+  enum :status, { draft: 0, published: 1 }
+  
   def tag_names
     tags.pluck(:name).join(", ")
   end

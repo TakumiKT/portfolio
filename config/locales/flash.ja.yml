@@ -1,0 +1,11 @@
+ja:
+  flash:
+    memos:
+      create:
+        success: "メモを作成しました"
+        failure: "メモを作成できませんでした"
+      update:
+        success: "メモを更新しました"
+        failure: "メモを更新できませんでした"
+      destroy:
+        success: "メモを削除しました"
