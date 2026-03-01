@@ -22,6 +22,65 @@
   border-bottom: 1px solid #ddd;
 }
 
+/* ユーザー（アイコン＋名前） */
+.app-header__user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  margin-left: 12px;
+}
+
+.app-header__username {
+  font-size: 12px;
+  color: #333;
+  line-height: 1;
+  max-width: 90px;          /* 長い名前対策 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 右側エリア全体（既存のままでOK） */
+.app-header__left,
+.app-header__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ログアウト + ユーザー情報を縦並び */
+.app-header__account {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* 右寄せ */
+  gap: 6px;
+}
+
+/* アイコン＋ユーザー名 */
+.app-header__user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+}
+
+/* button_to が作る form の余白を消す（ズレ防止） */
+.app-header__account form {
+  margin: 0;
+}
+
+/* ログアウトボタン */
+.app-header__button {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
 .app-header__brand {
   display: flex;
   align-items: center;
@@ -239,13 +298,15 @@ body {
   border: 1px solid #e5e5e5;
   border-radius: 10px;
   padding: 14px;
+  margin-bottom: 12px;
 }
 
 .memo-card__head {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 12px;
+  align-items: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .memo-card__date {
@@ -253,14 +314,53 @@ body {
   font-size: 0.9em;
 }
 
+.memo-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.memo-card__actions form {
+  margin: 0;
+  display: inline-block;
+}
 .memo-card__symptom {
+  display: block;
   margin-top: 8px;
   font-weight: bold;
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 .memo-card__sub {
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: 0.95em;
+  line-height: 1.4;
+}
+
+.memo-card__badges {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip--draft {
+  background: #fff7d6;
+  border-color: #d9b44a;
+  color: #6b5300;
+}
+
+.chip--published {
+  background: #e7f6ea;
+  border-color: #68b37a;
+  color: #1f5d2d;
+}
+
+.chip--draft .chip__x,
+.chip--published .chip__x {
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .memo-card__tags {
@@ -268,6 +368,22 @@ body {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+/* スマホ表示向け */
+@media (max-width: 600px) {
+  .memo-card {
+    padding: 14px;
+  }
+
+  .memo-card__head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .memo-card__actions {
+    justify-content: flex-end;
+  }
 }
 
 .tag-link {
@@ -737,26 +853,6 @@ body {
 
 .danger-title {
   margin: 0 0 8px;
-}
-
-/* ユーザー（アイコン＋名前） */
-.app-header__user {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  text-decoration: none;
-  margin-left: 12px;
-}
-
-.app-header__username {
-  font-size: 12px;
-  color: #333;
-  line-height: 1;
-  max-width: 90px;          /* 長い名前対策 */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* button_to が生成する form の余白対策 */

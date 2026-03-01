@@ -20,6 +20,15 @@ def index
     @memos = @memos.joins(:favorites).where(favorites: { user_id: current_user.id })
   end
 
+  # drafts=1 のときだけ下書き
+  if params[:drafts].present?
+    @memos = @memos.draft
+  elsif params[:published].present?
+    @memos = @memos.published
+  else
+    @memos = @memos.published # デフォルトは清書のみ
+  end
+
   # キーワード検索（複数カラムを対象）
   if @q.present?
     like = "%#{ActiveRecord::Base.sanitize_sql_like(@q)}%"
@@ -47,12 +56,13 @@ end
   end
 
   def create
-    @memo = current_user.memos.build(memo_params.except(:tag_names))
+    @memo = current_user.memos.build(memo_params)
+    @memo.status = (params[:commit_action] == "draft" ? :draft : :published)
+
     if @memo.save
-      save_tags(@memo, memo_params[:tag_names])
-      redirect_to memos_path, notice: t("flash.memos.create.success")
+      redirect_to memos_path, notice: (@memo.draft? ? "下書きとして保存しました" : "メモを作成しました")
     else
-      flash.now[:alert] = t("flash.memos.create.failure")
+      flash.now[:alert] = "メモの作成に失敗しました"
       render :new, status: :unprocessable_entity
     end
   end
@@ -62,10 +72,12 @@ end
   end
 
   def update
-    if @memo.update(memo_params.except(:tag_names))
-      save_tags(@memo, memo_params[:tag_names])
-      redirect_to memos_path, notice: t("flash.memo.updated")
+    @memo.status = (params[:commit_action] == "draft" ? :draft : :published)
+
+    if @memo.update(memo_params)
+      redirect_to memos_path, notice: (@memo.draft? ? "下書きを更新しました" : "メモを更新しました")
     else
+      flash.now[:alert] = "メモの更新に失敗しました"
       render :edit, status: :unprocessable_entity
     end
   end
@@ -83,7 +95,7 @@ private
   end
 
   def memo_params
-    params.require(:memo).permit(:symptom, :check_point, :judgment, :concern_point, :reflection, :tag_names)
+    params.require(:memo).permit(:symptom, :check_point, :judgment, :concern_point, :reflection, :tag_names, :status)
   end
 
   def save_tags(memo, tag_names)
@@ -99,5 +111,8 @@ private
     end
 
     memo.tags = tags
+
+    @memos = @memos.order(created_at: :desc).distinct
+    @favorite_memo_ids = current_user.favorites.pluck(:memo_id)
   end
 end

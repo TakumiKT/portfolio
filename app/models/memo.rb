@@ -7,7 +7,8 @@ class Memo < ApplicationRecord
   has_many :favorites, dependent: :destroy
   has_many :favorited_users, through: :favorites, source: :user
   attr_accessor :tag_names
-
+  enum :status, { draft: 0, published: 1 }
+  
   def tag_names
     tags.pluck(:name).join(", ")
   end
