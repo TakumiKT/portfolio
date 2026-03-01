@@ -175,7 +175,15 @@ body {
 
 @media (max-width: 600px) {
   .tag-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 1列→2列 */
+    gap: 6px;
+  }
+
+  .tag-item a {
+    display: block;       /* カラム幅いっぱいにして揃える */
+    text-align: center;
+    padding: 6px 8px;
+    font-size: 13px;
   }
 }
 /* フッター */
@@ -383,6 +391,176 @@ body {
 
   .memo-card__actions {
     justify-content: flex-end;
+  }
+}
+
+/* スマホ表示ヘッダー */
+@media (max-width: 600px) {
+  .app-main {
+    padding-bottom: 160px; /* 大きめに確保 */
+  }
+}
+
+@media (max-width: 600px) {
+  .app-header__nav {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .app-header__right {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .app-header__user {
+    margin-left: 0;
+  }
+
+  .app-header__username {
+    max-width: 72px;
+    font-size: 11px;
+  }
+
+  .app-header__avatar {
+    width: 36px;
+    height: 36px;
+  }
+}
+/* スマホ表示フッター */
+@media (max-width: 600px) {
+  .app-footer {
+    padding: 10px 0;
+  }
+
+  .app-footer__inner {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .app-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+
+  .app-footer__links a {
+    margin-right: 0;     /* 既存 margin を打ち消す */
+    font-size: 12px;
+  }
+
+  .app-footer__copy {
+    font-size: 11px;
+  }
+}
+/*フッター内のコピー表記をスマホだけ非表示/2行目に落とす*/
+@media (max-width: 600px) {
+  .app-footer__inner {
+    flex-direction: column;
+  }
+}
+
+/* スマホ表示検索フォーム */
+@media (max-width: 600px) {
+  .search-form__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-form__input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .search-form__actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;      /* 折り返し */
+    gap: 8px;
+    justify-content: flex-start;
+  }
+
+  .search-form__actions .btn {
+    width: auto;
+    flex: 0 0 auto;
+    text-align: center;
+    margin: 0;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+
+/* スマホ表示条件チップ/タグ一覧 */
+@media (max-width: 600px) {
+  .conditions {
+    gap: 6px;
+  }
+
+  .chip {
+    font-size: 0.85em;
+    padding: 5px 8px;
+  }
+
+  .tag-item a,
+  .tag-link {
+    padding: 5px 8px;
+    font-size: 0.9em;
+  }
+}
+
+/* スマホ表示メモカード */
+@media (max-width: 600px) {
+  .memo-card {
+    padding: 12px;
+  }
+
+  .memo-card__actions {
+    justify-content: flex-start; 
+    gap: 6px;
+  }
+
+  .favorite-btn {
+    padding: 6px 8px;
+  }
+}
+/* フォーム画面（新規/編集） */
+@media (max-width: 600px) {
+  .form-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .form-step__meta {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-step__badge {
+    min-width: auto;
+    width: fit-content;
+  }
+}
+/* 認証画面（ログイン/新規登録/編集） */
+@media (max-width: 600px) {
+  .auth-card {
+    margin: 12px auto;
+    padding: 12px;
+  }
+
+  .auth-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .avatar-row {
+    align-items: flex-start;
   }
 }
 
