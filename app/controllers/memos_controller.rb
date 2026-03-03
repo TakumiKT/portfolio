@@ -6,11 +6,14 @@ def index
   @q = params[:q].to_s.strip
   @tag_id = params[:tag_id]
   @selected_tag = current_user.tags.find_by(id: @tag_id) if @tag_id.present?
-  @memos = current_user.memos.includes(:tags).order(created_at: :desc)
-  # N+1対策
-  @favorite_memo_ids = current_user.favorites.pluck(:memo_id)
-  
-  # 絞り込み時にタグ名を表示
+  @memos = current_user.memos.includes(:tags)
+  @favorite_memo_ids = current_user.favorites.pluck(:memo_id) # N+1対策
+  @from_date = params[:from_date].to_s.strip
+  @to_date   = params[:to_date].to_s.strip
+  @search_in = params[:search_in].presence || "all"   # all / symptom / judgment
+  @sort      = params[:sort].presence || "newest"     # newest / oldest
+
+  # タグ絞り込み
   if @tag_id.present?
     @memos = @memos.joins(:memo_tags).where(memo_tags: { tag_id: @tag_id })
   end
@@ -20,36 +23,67 @@ def index
     @memos = @memos.joins(:favorites).where(favorites: { user_id: current_user.id })
   end
 
-  # drafts=1 のときだけ下書き
+  # 状態フィルタ（デフォルトは清書のみ）
   if params[:drafts].present?
     @memos = @memos.draft
   elsif params[:published].present?
     @memos = @memos.published
   else
-    @memos = @memos.published # デフォルトは清書のみ
+    @memos = @memos.published
   end
 
-  # キーワード検索（複数カラムを対象）
+  # キーワード検索（検索対象切替）
   if @q.present?
     like = "%#{ActiveRecord::Base.sanitize_sql_like(@q)}%"
-    @memos = @memos.left_joins(:tags).where(
-      "memos.symptom ILIKE :q OR memos.check_point ILIKE :q OR memos.judgment ILIKE :q OR memos.concern_point ILIKE :q OR memos.reflection ILIKE :q OR tags.name ILIKE :q",
-      q: like
-    )
+
+    case @search_in
+    when "symptom"
+      @memos = @memos.where("memos.symptom ILIKE :q", q: like)
+    when "judgment"
+      @memos = @memos.where("memos.judgment ILIKE :q", q: like)
+    else
+      @memos = @memos.left_joins(:tags).where(
+        "memos.symptom ILIKE :q OR memos.check_point ILIKE :q OR memos.judgment ILIKE :q OR memos.concern_point ILIKE :q OR memos.reflection ILIKE :q OR tags.name ILIKE :q",
+        q: like
+      )
+    end
   end
 
-    @memos = @memos.distinct
-    @tags = current_user.tags
-      .joins(:memos)   # memosと紐づくタグだけ
-      .where(memos: { user_id: current_user.id })
-      .distinct
-      .order(:name)
+  # 日付範囲
+  if @from_date.present?
+    begin
+      from = Date.parse(@from_date)
+      @memos = @memos.where("memos.created_at >= ?", from.beginning_of_day)
+    rescue ArgumentError
+      flash.now[:alert] = "開始日の形式が正しくありません"
+    end
+  end
+
+  if @to_date.present?
+    begin
+      to = Date.parse(@to_date)
+      @memos = @memos.where("memos.created_at <= ?", to.end_of_day)
+    rescue ArgumentError
+      flash.now[:alert] = "終了日の形式が正しくありません"
+    end
+  end
+
+  # 並び順
+  case @sort
+  when "oldest"
+    @memos = @memos.order(created_at: :asc)
+  else
+    @memos = @memos.order(created_at: :desc)
+  end
+
+  @memos = @memos.distinct
+
+  @tags = current_user.tags
+                     .joins(:memos)
+                     .where(memos: { user_id: current_user.id })
+                     .distinct
+                     .order(:name)
 end
-
-  # タグで絞り込み（ANDで追加）
-  if @tag_id.present?
-    @memos = @memos.joins(:memo_tags).where(memo_tags: { tag_id: @tag_id })
-  end
 
   def new
     @memo = current_user.memos.build

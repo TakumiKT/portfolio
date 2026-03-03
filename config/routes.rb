@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   # メモ
   resources :memos, except: [ :show ]
+
   # フッター
   get "/terms",   to: "pages#terms"
   get "/privacy", to: "pages#privacy"
@@ -20,4 +21,7 @@ Rails.application.routes.draw do
 
   # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
+
+  # オートコンプリート
+  get "tags/autocomplete", to: "tags#autocomplete"
 end
