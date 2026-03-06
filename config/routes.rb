@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { registrations: "users/registrations" }
-
+  devise_for :users, controllers: {
+    registrations: "users/registrations",
+    omniauth_callbacks: "users/omniauth_callbacks"
+  }
   # ログイン中はメモ一覧をトップにする
   authenticated :user do
     root to: "memos#index", as: :authenticated_root
@@ -13,6 +15,7 @@ Rails.application.routes.draw do
 
   # メモ
   resources :memos, except: [ :show ]
+
   # フッター
   get "/terms",   to: "pages#terms"
   get "/privacy", to: "pages#privacy"
@@ -20,4 +23,7 @@ Rails.application.routes.draw do
 
   # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
+
+  # オートコンプリート
+  get "tags/autocomplete", to: "tags#autocomplete"
 end

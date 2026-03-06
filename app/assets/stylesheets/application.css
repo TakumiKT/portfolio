@@ -186,6 +186,43 @@ body {
     font-size: 13px;
   }
 }
+
+/* タグ入力オートコンプリート */
+.tag-autocomplete {
+  position: relative;
+}
+
+.tag-autocomplete__list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: none;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  padding: 4px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.tag-autocomplete__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tag-autocomplete__item:hover {
+  background: #f3f6ff;
+}
+
 /* フッター */
 .app-footer {
   border-top: 1px solid #e5e5e5;
@@ -504,8 +541,10 @@ body {
 
   .tag-item a,
   .tag-link {
-    padding: 5px 8px;
-    font-size: 0.9em;
+    display: block;
+    text-align: center;
+    padding: 6px 8px;
+    font-size: 13px;
   }
 }
 
@@ -1057,4 +1096,129 @@ body {
 .favorite-btn:focus-visible {
   outline: 2px solid #3e41ee;
   outline-offset: 2px;
+}
+
+.search-form__advanced {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.search-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+}
+
+.search-form__field label {
+  font-size: 12px;
+  color: #333;
+}
+
+.search-form__select,
+.search-form__date {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+}
+
+@media (max-width: 600px) {
+  .search-form__advanced {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .search-form__field {
+    min-width: 0;
+  }
+
+  .search-form__select,
+  .search-form__date {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* ===== Global Loading ===== */
+.global-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: none; /* 初期非表示 */
+}
+
+.global-loading.is-active {
+  display: block;
+}
+
+.global-loading__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(1px);
+}
+
+.global-loading__content {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+}
+
+.global-loading__spinner {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 4px solid #d7def8;
+  border-top-color: #3e41ee;
+  animation: global-loading-spin 0.8s linear infinite;
+}
+
+.global-loading__text {
+  margin: 0;
+  font-size: 13px;
+  color: #333;
+}
+
+@keyframes global-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Googleアカウントでログイン */
+.auth-divider {
+  margin: 14px 0;
+  text-align: center;
+  position: relative;
+}
+
+.auth-divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 1px solid #ddd;
+  z-index: 0;
+}
+
+.auth-divider span {
+  position: relative;
+  z-index: 1;
+  background: #fff3e3; /* body背景に合わせる */
+  padding: 0 8px;
+  color: #666;
+  font-size: 12px;
+}
+
+.auth-google-btn {
+  width: 100%;
+  text-align: center;
 }

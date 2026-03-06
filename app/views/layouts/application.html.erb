@@ -20,12 +20,16 @@
   </head>
 
   <body>
+    <div id="global-loading" class="global-loading" aria-hidden="true">
+    <div class="global-loading__backdrop"></div>
+    <div class="global-loading__content" role="status" aria-live="polite">
+      <div class="global-loading__spinner"></div>
+      <p class="global-loading__text">読み込み中...</p>
+    </div>
+  </div>
     <%= render "shared/header" %>
 
     <main class="app-main">
-    <% flash.each do |type, message| %>
- 
-    <% end %>
       <div class="container">
         <% if notice %><p class="flash flash--notice"><%= notice %></p><% end %>
         <% if alert  %><p class="flash flash--alert"><%= alert %></p><% end %>

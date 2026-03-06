@@ -42,7 +42,19 @@
     <div class="auth-actions">
       <%= f.submit t("devise.registrations.new.submit"), class: "btn btn--primary" %>
     </div>
+
   <% end %>
+  <div class="auth-divider">
+    <span>または</span>
+  </div>
+
+  <div class="auth-actions">
+    <%= button_to "Googleでログイン",
+          user_google_oauth2_omniauth_authorize_path,
+          method: :post,
+          class: "btn btn--sub auth-google-btn",
+          data: { turbo: false } %>
+  </div>
 
   <div class="auth-links">
     <%= render "devise/shared/links" %>
