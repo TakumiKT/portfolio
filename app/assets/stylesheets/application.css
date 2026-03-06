@@ -1191,3 +1191,34 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* Googleアカウントでログイン */
+.auth-divider {
+  margin: 14px 0;
+  text-align: center;
+  position: relative;
+}
+
+.auth-divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 1px solid #ddd;
+  z-index: 0;
+}
+
+.auth-divider span {
+  position: relative;
+  z-index: 1;
+  background: #fff3e3; /* body背景に合わせる */
+  padding: 0 8px;
+  color: #666;
+  font-size: 12px;
+}
+
+.auth-google-btn {
+  width: 100%;
+  text-align: center;
+}
