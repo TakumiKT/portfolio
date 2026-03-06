@@ -8,9 +8,7 @@
 
     <% if flash.alert.present? %>
       <div class="auth-errors">
-        <ul>
-          <li><%= flash.alert %></li>
-        </ul>
+        <ul><li><%= flash.alert %></li></ul>
       </div>
     <% end %>
 
@@ -32,9 +30,22 @@
     <% end %>
 
     <div class="auth-actions">
-      <%= f.submit "ログイン", class: "btn btn--primary" %>
+      <%= f.submit "ログイン",
+            class: "btn btn--primary",
+            data: { turbo_submits_with: "ログイン中..." } %>
     </div>
   <% end %>
+
+  <%# ---- フォーム外 ---- %>
+  <div class="auth-divider"></div>
+
+  <div class="auth-actions">
+    <%= button_to "Googleアカウントでログイン",
+          user_google_oauth2_omniauth_authorize_path,
+          method: :post,
+          class: "btn btn--sub auth-google-btn",
+          data: { turbo: false } %>
+  </div>
 
   <div class="auth-links">
     <%= render "devise/shared/links" %>
