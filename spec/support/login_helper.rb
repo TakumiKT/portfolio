@@ -1,5 +1,7 @@
+require "nokogiri"
+
 module LoginHelper
-  def login_as(user, password: "password")
-    post user_session_path, params: { user: { email: user.email, password: password } }
+  def sign_in_as(user)
+    sign_in user
   end
 end

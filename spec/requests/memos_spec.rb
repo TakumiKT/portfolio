@@ -6,7 +6,7 @@ RSpec.describe "Memos", type: :request do
   let(:user) { create(:user) }
   let(:other) { create(:user) }
 
-  before { login_as(user) }
+  before { sign_in_as(user) }
 
   it "自分のメモを作成できる" do
     post memos_path, params: {

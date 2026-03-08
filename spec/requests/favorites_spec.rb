@@ -1,12 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "Favorites", type: :request do
-  include LoginHelper
+include LoginHelper
 
   let(:user) { create(:user) }
   let(:memo) { create(:memo, :published, user: user) }
 
-  before { login_as(user) }
+  before { sign_in_as(user) }
 
   it "お気に入りに追加できる" do
     post memo_favorite_path(memo)

@@ -2,16 +2,20 @@ require "rails_helper"
 
 RSpec.describe "Memos search", type: :request do
   include LoginHelper
+  include ActiveSupport::Testing::TimeHelpers
 
   let(:user) { create(:user) }
 
-  before { login_as(user) }
+  before { sign_in_as(user) } # ← いまのログインヘルパー名に合わせて
 
   it "qで絞り込める" do
     create(:memo, :published, user: user, symptom: "頭痛")
     create(:memo, :published, user: user, symptom: "腹痛")
 
     get memos_path, params: { q: "頭痛" }
+    follow_redirect! while response.redirect?
+    puts response.status
+    puts response.body.include?("開始日") # 画面に開始日が出るようなら true
     expect(response).to have_http_status(:ok)
     expect(response.body).to include("頭痛")
     expect(response.body).not_to include("腹痛")
@@ -63,15 +67,21 @@ RSpec.describe "Memos search", type: :request do
   end
 
   it "日付範囲で絞り込める（from/to）" do
-    old = create(:memo, :published, user: user, symptom: "古い")
-    new = create(:memo, :published, user: user, symptom: "新しい")
+    travel_to(Time.zone.parse("2026-01-01 12:00:00")) do
+      create(:memo, :published, user: user, symptom: "ZZZ_OLD_20260101")
+    end
+    travel_to(Time.zone.parse("2026-02-15 12:00:00")) do
+      create(:memo, :published, user: user, symptom: "ZZZ_NEW_20260215")
+    end
 
-    old.update!(created_at: Time.zone.parse("2026-01-01 10:00:00"))
-    new.update!(created_at: Time.zone.parse("2026-02-01 10:00:00"))
+    # デバッグしたいならここ（任意）
+    # puts Memo.order(:created_at).pluck(:symptom, :created_at).inspect
+    puts Memo.order(:created_at).pluck(:symptom, :created_at).inspect
+    get memos_path, params: { from_date: "2026-02-01", to_date: "2026-02-28", published: 1 }
 
-    get memos_path, params: { from_date: "2026-02-01", to_date: "2026-02-28" }
-    expect(response.body).to include("新しい")
-    expect(response.body).not_to include("古い")
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include("ZZZ_NEW_20260215")
+    expect(response.body).not_to include("ZZZ_OLD_20260101")
   end
 
   it "sort=oldest で古い順になる（ざっくり確認）" do
