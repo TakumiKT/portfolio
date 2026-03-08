@@ -5,6 +5,6 @@ class CreateFavorites < ActiveRecord::Migration[8.1]
       t.references :memo, null: false, foreign_key: true
       t.timestamps
     end
-    add_index :favorites, [:user_id, :memo_id], unique: true
+    add_index :favorites, [ :user_id, :memo_id ], unique: true
   end
 end

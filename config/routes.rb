@@ -7,8 +7,8 @@ Rails.application.routes.draw do
   authenticated :user do
     root to: "memos#index", as: :authenticated_root
   end
-  resources :memos, except: [:show] do
-    resource :favorite, only: [:create, :destroy]
+  resources :memos, except: [ :show ] do
+    resource :favorite, only: [ :create, :destroy ]
   end
   # 未ログイン時のトップページ
   root to: "pages#home"

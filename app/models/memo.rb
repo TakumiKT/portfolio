@@ -11,11 +11,11 @@ class Memo < ApplicationRecord
   after_save :save_tags_from_tag_names
 
   enum :status, { draft: 0, published: 1 }
-  
+
   def tag_names
      @tag_names || tags.order(:name).pluck(:name).join(", ")
   end
-  
+
   private
 
   def save_tags_from_tag_names

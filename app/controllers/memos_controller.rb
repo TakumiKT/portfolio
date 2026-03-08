@@ -3,6 +3,8 @@ class MemosController < ApplicationController
   before_action :set_memo, only: [ :edit, :update, :destroy ]
 
 def index
+  ## デバッグ
+  Rails.logger.warn("DEBUG from_date=#{params[:from_date].inspect} to_date=#{params[:to_date].inspect}")
   @q = params[:q].to_s.strip
   @tag_id = params[:tag_id]
   @selected_tag = current_user.tags.find_by(id: @tag_id) if @tag_id.present?

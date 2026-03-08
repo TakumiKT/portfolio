@@ -2,7 +2,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable,
          :rememberable, :validatable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [:google_oauth2]
+         :omniauthable, omniauth_providers: [ :google_oauth2 ]
   has_many :memos, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :favorites, dependent: :destroy
@@ -15,7 +15,7 @@ class User < ApplicationRecord
     user.email = auth.info.email
     user.name = auth.info.name.presence || auth.info.email.split("@").first
 
-  # Devise用パスワード（Googleログイン時のみ内部的に設定）
+    # Devise用パスワード（Googleログイン時のみ内部的に設定）
     user.password = Devise.friendly_token[0, 20] if user.encrypted_password.blank?
 
     user.save!
