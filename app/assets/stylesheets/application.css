@@ -1222,3 +1222,10 @@ body {
   width: 100%;
   text-align: center;
 }
+
+.page-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}

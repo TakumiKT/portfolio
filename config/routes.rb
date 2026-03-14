@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   # メモ
   resources :memos, except: [ :show ]
 
+  # 使い方ガイド
+  get "/guide", to: "pages#guide"
+
   # フッター
   get "/terms",   to: "pages#terms"
   get "/privacy", to: "pages#privacy"
