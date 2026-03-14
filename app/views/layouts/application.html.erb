@@ -1,29 +1,61 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "App" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="App">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+  <title><%= content_for(:title) || "MEMOTC" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="App">
+  <meta name="mobile-web-app-capable" content="yes">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-    <%= yield :head %>
+  <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+  <!-- OGP / Twitter（ここに1セットだけ置く） -->
+  <meta property="og:title" content="<%= content_for?(:og_title) ? yield(:og_title) : 'MEMOTC' %>">
+  <meta property="og:description" content="<%= content_for?(:og_description) ? yield(:og_description) : '登録販売者の接客メモを、構造化して蓄積・検索できる個人向けアプリ' %>">
+  <meta property="og:type" content="<%= content_for?(:og_type) ? yield(:og_type) : 'website' %>">
+  <meta property="og:url" content="<%= content_for?(:og_url) ? yield(:og_url) : request.original_url %>">
+  <meta property="og:image" content="<%= content_for?(:og_image) ? yield(:og_image) : ogp_image_url %>">
+  <meta property="og:site_name" content="MEMOTC">
+  <meta property="og:locale" content="ja_JP">
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= content_for?(:og_title) ? yield(:og_title) : 'MEMOTC' %>">
+  <meta name="twitter:description" content="<%= content_for?(:og_description) ? yield(:og_description) : '登録販売者の接客メモを、構造化して蓄積・検索できる個人向けアプリ' %>">
+  <meta name="twitter:image" content="<%= content_for?(:og_image) ? yield(:og_image) : ogp_image_url %>">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
+  <link rel="icon" href="/icon.png" type="image/png">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.png">
+
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
 
   <body>
-    <%= yield %>
+    <div id="global-loading" class="global-loading" aria-hidden="true">
+    <div class="global-loading__backdrop"></div>
+    <div class="global-loading__content" role="status" aria-live="polite">
+      <div class="global-loading__spinner"></div>
+      <p class="global-loading__text">読み込み中...</p>
+    </div>
+  </div>
+    <%= render "shared/header" %>
+
+    <main class="app-main">
+      <div class="container">
+        <% if notice %><p class="flash flash--notice"><%= notice %></p><% end %>
+        <% if alert  %><p class="flash flash--alert"><%= alert %></p><% end %>
+
+        <%= yield %>
+      </div>
+    </main>
+
+    <%= render "shared/footer" %>
+  </body>
+  </body>
+  <main>
+  </main>
   </body>
 </html>

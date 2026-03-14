@@ -1,0 +1,19 @@
+ja:
+  activerecord:
+    models:
+      memo: "接客メモ"
+      tag: "タグ"
+      user: "ユーザー"
+    attributes:
+      memo:
+        symptom: "相談内容・症状"
+        check_point: "確認したポイント"
+        judgment: "判断・対応内容"
+        concern_point: "注意点・迷った点"
+        reflection: "振り返り・改善点"
+      tag:
+        name: "タグ名"
+      user:
+        name: "ユーザー名"
+        email: "メールアドレス"
+        password: "パスワード"
