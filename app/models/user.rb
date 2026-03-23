@@ -7,6 +7,8 @@ class User < ApplicationRecord
   has_many :tags, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :favorite_memos, through: :favorites, source: :memo
+  has_many :ai_usages, dependent: :destroy
+  has_many :ai_results, dependent: :destroy
   has_one_attached :avatar
 
   def self.from_omniauth(auth)
