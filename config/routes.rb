@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   # メモ
   resources :memos, except: [ :show ]
 
+  resources :memos, except: [:show] do
+    post :ai_feedback, on: :member
+  end
   # 使い方ガイド
   get "/guide", to: "pages#guide"
 
