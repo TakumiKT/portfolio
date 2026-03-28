@@ -11,6 +11,7 @@
       <% if user_signed_in? %>
         <%= link_to "メモ一覧", memos_path, class: "app-header__link" %>
         <%= link_to "新規メモ", new_memo_path, class: "app-header__link" %>
+        <%= link_to "AIレポート", reports_path, class: "btn btn--header" %>
       <% end %>
     </div>
 

@@ -1231,10 +1231,9 @@ body {
 }
 
  /* AIアウトプット */
-
 .ai-output {
   white-space: pre-wrap;
-  font-size: 1.05rem; /* 好みで 1.1rem など */
+  font-size: 1.05rem; 
   line-height: 1.7;
   margin-top: 8px;
 }
@@ -1244,4 +1243,18 @@ body {
   border: 1px solid #e5e5e5;
   border-radius: 10px;
   padding: 12px;
+}
+
+/* ヘッダー内ボタン（AIレポート用） */
+.btn--header {
+  padding: 8px 12px;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  line-height: 1;
+  border: 1px solid #8aa0d8;   /* ヘッダー色と馴染む程度 */
+  background: #ffffff;
+}
+
+.btn--header:hover {
+  opacity: 0.9;
 }

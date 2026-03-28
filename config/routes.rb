@@ -32,4 +32,8 @@ Rails.application.routes.draw do
 
   # オートコンプリート
   get "tags/autocomplete", to: "tags#autocomplete"
+  
+  #AIレポート
+  get  "/reports",          to: "reports#index"
+  post "/reports/generate", to: "reports#generate", as: :reports_generate
 end

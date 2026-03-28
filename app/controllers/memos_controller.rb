@@ -121,67 +121,59 @@ end
     redirect_to memos_path, notice: t("flash.memo.destroyed")
   end
 
-  def ai_feedback
-    # デバッグ
-    Rails.logger.warn("AI_FEEDBACK_HIT memo_id=#{params[:id]} user_id=#{current_user.id}")
-    @memo = current_user.memos.find(params[:id])
+def ai_feedback
+  @memo = current_user.memos.find(params[:id])
 
-    # 1日3回制限
-    today = Time.zone.today
-    usage = current_user.ai_usages.find_or_create_by!(date: today)
-    limit = 3
+  today = Time.zone.today
+  usage = current_user.ai_usages.find_or_create_by!(date: today)
+  limit = 3
 
-    if usage.count >= limit
-      redirect_to edit_memo_path(@memo), alert: "AIフィードバックは1日#{limit}回までです。明日また試してください。"
-      return
-    end
-
-    # 入力のハッシュ（送る情報は最小限）
-    memo_hash = {
-      symptom: @memo.symptom.to_s,
-      check_point: @memo.check_point.to_s,
-      judgment: @memo.judgment.to_s,
-      concern_point: @memo.concern_point.to_s,
-      reflection: @memo.reflection.to_s,
-      tag_names: @memo.tags.order(:name).pluck(:name).join(", ")
-    }
-
-    digest_source = memo_hash.values.join("\n")
-    input_digest = Digest::SHA256.hexdigest(digest_source)
-
-    # 既に同じ内容で生成済みなら再利用（課金しない）
-    existing = current_user.ai_results.find_by(kind: "feedback", memo_id: @memo.id, input_digest: input_digest)
-    if existing
-      redirect_to edit_memo_path(@memo), notice: "AIフィードバック（保存済み）を表示しました。"
-      return
-    end
-
-    client = OpenaiClient.new
-    result = client.feedback_for_memo(memo_hash)
-
-    current_user.ai_results.create!(
-      memo: @memo,
-      kind: "feedback",
-      input_digest: input_digest,
-      content: result[:content],
-      model: result[:model],
-     prompt_version: result[:prompt_version]
-    )
-
-    usage.update!(count: usage.count + 1)
-
-    redirect_to edit_memo_path(@memo), notice: "AIフィードバックを生成しました。"
-  rescue OpenaiClient::TimeoutError => e
-    Rails.logger.warn(e.full_message)
-    redirect_to edit_memo_path(@memo), alert: "AIの応答が混み合っているためタイムアウトしました。もう一度お試しください。"
-  rescue OpenaiClient::TemporaryError => e
-    Rails.logger.warn(e.full_message)
-    redirect_to edit_memo_path(@memo), alert: e.message
-  rescue OpenaiClient::Error => e
-    Rails.logger.error(e.full_message)
-    redirect_to edit_memo_path(@memo), alert: "AI生成に失敗しました：#{e.message}"
-
+  if usage.count >= limit
+    redirect_to edit_memo_path(@memo), alert: "AIフィードバックは1日#{limit}回までです。明日また試してください。"
+    return
   end
+
+  memo_hash = {
+    symptom: @memo.symptom.to_s,
+    check_point: @memo.check_point.to_s,
+    judgment: @memo.judgment.to_s,
+    concern_point: @memo.concern_point.to_s,
+    reflection: @memo.reflection.to_s,
+    tag_names: @memo.tags.order(:name).pluck(:name).join(", ")
+  }
+
+  input_digest = Digest::SHA256.hexdigest(memo_hash.values.join("\n"))
+
+  existing = current_user.ai_results.find_by(kind: "feedback", memo_id: @memo.id, input_digest: input_digest)
+  if existing
+    redirect_to edit_memo_path(@memo, anchor: "ai-feedback"), notice: "AIフィードバック（保存済み）を表示しました。"
+    return
+  end
+
+  result_hash = OpenaiClient.new.feedback_for_memo(memo_hash)
+
+  current_user.ai_results.create!(
+    memo: @memo,
+    kind: "feedback",
+    input_digest: input_digest,
+    content: result_hash.fetch(:content),
+    model: result_hash.fetch(:model),
+    prompt_version: result_hash.fetch(:prompt_version)
+  )
+
+  usage.update!(count: usage.count + 1)
+
+  redirect_to edit_memo_path(@memo, anchor: "ai-feedback"), notice: "AIフィードバックを生成しました。"
+rescue OpenaiClient::TimeoutError => e
+  Rails.logger.warn(e.full_message)
+  redirect_to edit_memo_path(@memo), alert: "AIの応答が混み合っているためタイムアウトしました。もう一度お試しください。"
+rescue OpenaiClient::TemporaryError => e
+  Rails.logger.warn(e.full_message)
+  redirect_to edit_memo_path(@memo), alert: e.message
+rescue OpenaiClient::Error => e
+  Rails.logger.error(e.full_message)
+  redirect_to edit_memo_path(@memo), alert: "AI生成に失敗しました：#{e.message}"
+end
 
 private
 

@@ -5,4 +5,5 @@ class AiResult < ApplicationRecord
   validates :kind, presence: true
   validates :input_digest, presence: true
   validates :content, presence: true
+  validates :memo_id, presence: true, if: -> { kind == "feedback" }
 end
