@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_16_073406) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_31_013125) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,7 +47,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_073406) do
     t.datetime "created_at", null: false
     t.string "input_digest"
     t.string "kind"
-    t.bigint "memo_id", null: false
+    t.bigint "memo_id"
     t.string "model"
     t.string "prompt_version"
     t.datetime "updated_at", null: false
@@ -61,8 +61,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_073406) do
     t.integer "count", default: 0, null: false
     t.datetime "created_at", null: false
     t.date "date"
+    t.string "kind", default: "feedback", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["user_id", "date", "kind"], name: "index_ai_usages_on_user_id_and_date_and_kind", unique: true
     t.index ["user_id", "date"], name: "index_ai_usages_on_user_id_and_date", unique: true
     t.index ["user_id"], name: "index_ai_usages_on_user_id"
   end
