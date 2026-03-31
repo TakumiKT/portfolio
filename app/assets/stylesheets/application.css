@@ -1143,7 +1143,7 @@ body {
   }
 }
 
-/* ===== Global Loading ===== */
+/* Global Loading */
 .global-loading {
   position: fixed;
   inset: 0;
@@ -1212,7 +1212,7 @@ body {
 .auth-divider span {
   position: relative;
   z-index: 1;
-  background: #fff3e3; /* body背景に合わせる */
+  background: #fff3e3; 
   padding: 0 8px;
   color: #666;
   font-size: 12px;
@@ -1257,4 +1257,14 @@ body {
 
 .btn--header:hover {
   opacity: 0.9;
+}
+
+.ai-usage-note{
+  margin: 8px 0 12px;
+  font-size: 0.95em;
+  color: #333;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 8px 10px;
 }

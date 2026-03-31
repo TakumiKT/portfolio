@@ -18,6 +18,10 @@
       data: { disable_with: "生成中..." } %>
 <p class="note">※ 学習・振り返り用途のフィードバックです。医療判断の代替ではありません。</p>
 
+<div class="ai-usage-note">
+  本日のAIフィードバック：<%= ai_used(:feedback) %>/<%= AiUsageHelper::FEEDBACK_LIMIT %> 回（残り <%= ai_remaining(:feedback) %> 回）
+</div>
+
 <%= form_with model: @memo do |f| %>
   <%= render "form", f: f, memo: @memo %>
   <% ai = current_user.ai_results.where(kind: "feedback", memo_id: @memo.id).order(created_at: :desc).first %>

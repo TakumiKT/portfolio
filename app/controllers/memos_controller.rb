@@ -122,57 +122,22 @@ end
   end
 
 def ai_feedback
-  @memo = current_user.memos.find(params[:id])
+  memo = current_user.memos.find(params[:id])
 
-  today = Time.zone.today
-  usage = current_user.ai_usages.find_or_create_by!(date: today)
-  limit = 3
+  Ai::FeedbackService.new(user: current_user).call!(memo: memo)
 
-  if usage.count >= limit
-    redirect_to edit_memo_path(@memo), alert: "AIフィードバックは1日#{limit}回までです。明日また試してください。"
-    return
-  end
-
-  memo_hash = {
-    symptom: @memo.symptom.to_s,
-    check_point: @memo.check_point.to_s,
-    judgment: @memo.judgment.to_s,
-    concern_point: @memo.concern_point.to_s,
-    reflection: @memo.reflection.to_s,
-    tag_names: @memo.tags.order(:name).pluck(:name).join(", ")
-  }
-
-  input_digest = Digest::SHA256.hexdigest(memo_hash.values.join("\n"))
-
-  existing = current_user.ai_results.find_by(kind: "feedback", memo_id: @memo.id, input_digest: input_digest)
-  if existing
-    redirect_to edit_memo_path(@memo, anchor: "ai-feedback"), notice: "AIフィードバック（保存済み）を表示しました。"
-    return
-  end
-
-  result_hash = OpenaiClient.new.feedback_for_memo(memo_hash)
-
-  current_user.ai_results.create!(
-    memo: @memo,
-    kind: "feedback",
-    input_digest: input_digest,
-    content: result_hash.fetch(:content),
-    model: result_hash.fetch(:model),
-    prompt_version: result_hash.fetch(:prompt_version)
-  )
-
-  usage.update!(count: usage.count + 1)
-
-  redirect_to edit_memo_path(@memo, anchor: "ai-feedback"), notice: "AIフィードバックを生成しました。"
+  redirect_to edit_memo_path(memo, anchor: "ai-feedback"), notice: "AIフィードバックを生成しました。"
+rescue Ai::Generator::LimitExceeded => e
+  redirect_to edit_memo_path(memo), alert: e.message
 rescue OpenaiClient::TimeoutError => e
   Rails.logger.warn(e.full_message)
-  redirect_to edit_memo_path(@memo), alert: "AIの応答が混み合っているためタイムアウトしました。もう一度お試しください。"
+  redirect_to edit_memo_path(memo), alert: "AIの応答が混み合っているためタイムアウトしました。もう一度お試しください。"
 rescue OpenaiClient::TemporaryError => e
   Rails.logger.warn(e.full_message)
-  redirect_to edit_memo_path(@memo), alert: e.message
+  redirect_to edit_memo_path(memo), alert: e.message
 rescue OpenaiClient::Error => e
   Rails.logger.error(e.full_message)
-  redirect_to edit_memo_path(@memo), alert: "AI生成に失敗しました：#{e.message}"
+  redirect_to edit_memo_path(memo), alert: "AI生成に失敗しました：#{e.message}"
 end
 
 private
