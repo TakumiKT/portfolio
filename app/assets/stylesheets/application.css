@@ -1335,3 +1335,139 @@ body {
     padding: 14px 14px;
   }
 }
+
+/* テンプレ－ト list/show */
+.template-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 12px 0 0;
+}
+
+.template-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid #e5e5e5;
+}
+
+.template-item__name {
+  font-weight: bold;
+}
+
+.template-item__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.template-show__block {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.template-show__block h2 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  border-left: 4px solid #c8d4ec;
+  padding-left: 10px;
+}
+
+/* スマホ */
+@media (max-width: 600px) {
+  .template-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}/* Template list/show */
+.template-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 12px 0 0;
+}
+
+.template-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid #e5e5e5;
+}
+
+.template-item__name {
+  font-weight: bold;
+}
+
+.template-item__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.template-show__block {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.template-show__block h2 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  border-left: 4px solid #c8d4ec;
+  padding-left: 10px;
+}
+
+/* スマホ */
+@media (max-width: 600px) {
+  .template-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+* templates/index 内のフォーム区切り */
+.card-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.card-section__title {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+}
+
+/* フォーム（メモと共通） */
+.form-field {
+  margin-top: 12px;
+}
+
+.form-field label {
+  font-weight: 600;
+}
+
+.form-field__input,
+.form-field__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 1rem;
+}
+
+.form-field__textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   # 未ログイン時のトップページ
   root to: "pages#home"
 
+  resources :templates
   # メモ
   resources :memos, except: [ :show ]
 

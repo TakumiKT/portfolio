@@ -85,9 +85,15 @@ def index
                      .order(:name)
 end
 
-  def new
-    @memo = current_user.memos.build
+def new
+  @memo = current_user.memos.build
+  @templates = current_user.templates.order(:name)
+
+  if params[:template_id].present?
+    @selected_template = current_user.templates.find_by(id: params[:template_id])
+    apply_template_defaults(@memo, @selected_template) if @selected_template
   end
+end
 
   def create
     @memo = current_user.memos.build(memo_params)
@@ -103,6 +109,12 @@ end
 
   # edit を「詳細兼編集」として使う
   def edit
+    @templates = current_user.templates.order(:name)
+
+    if params[:template_id].present?
+      @selected_template = current_user.templates.find_by(id: params[:template_id])
+      apply_template_defaults(@memo, @selected_template) if @selected_template
+    end
   end
 
   def update
@@ -167,5 +179,18 @@ private
 
     @memos = @memos.order(created_at: :desc).distinct
     @favorite_memo_ids = current_user.favorites.pluck(:memo_id)
+  end
+
+  def apply_template_defaults(memo, template)
+    memo.symptom       = memo.symptom.presence       || template.symptom_hint
+    memo.check_point   = memo.check_point.presence   || template.check_point_hint
+    memo.judgment      = memo.judgment.presence      || template.judgment_hint
+    memo.concern_point = memo.concern_point.presence || template.concern_point_hint
+    memo.reflection    = memo.reflection.presence    || template.reflection_hint
+
+    # tag_names をフォームで使っている場合のみ（memo.tag_names がある前提）
+    if memo.respond_to?(:tag_names) && memo.tag_names.blank?
+      memo.tag_names = template.tag_names_hint.to_s
+    end
   end
 end
