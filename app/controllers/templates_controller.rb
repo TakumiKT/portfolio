@@ -3,7 +3,7 @@ class TemplatesController < ApplicationController
   before_action :set_template, only: %i[show edit update destroy]
 
   before_action :authenticate_user!
-  
+
   def index
     @templates = current_user.templates.order(:name)
     @template  = current_user.templates.new

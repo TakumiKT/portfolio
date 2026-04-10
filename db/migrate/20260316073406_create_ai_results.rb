@@ -11,6 +11,6 @@ class CreateAiResults < ActiveRecord::Migration[8.1]
 
       t.timestamps
     end
-    add_index :ai_results, [:user_id, :kind, :input_digest]
+    add_index :ai_results, [ :user_id, :kind, :input_digest ]
   end
 end

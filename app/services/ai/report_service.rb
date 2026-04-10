@@ -15,7 +15,7 @@ module Ai
       sort      = params[:sort].presence || "newest"
       limit     = params[:limit].to_i
       limit     = 30 if limit <= 0
-      limit     = [limit, MAX_REPORT_MEMOS].min
+      limit     = [ limit, MAX_REPORT_MEMOS ].min
       favorites = params[:favorites].present?
 
       scope = build_scope(
