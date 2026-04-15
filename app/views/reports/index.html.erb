@@ -10,6 +10,10 @@
       </div>
     </div>
 
+    <div class="ai-usage-note">
+      本日のAIレポート：<%= ai_used(:report) %>/<%= AiUsageHelper::REPORT_LIMIT %> 回（残り <%= ai_remaining(:report) %> 回）
+    </div>
+
     <div class="search-form__advanced">
       <div class="search-form__field">
         <%= label_tag :search_in, "検索対象" %>

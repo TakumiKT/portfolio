@@ -85,9 +85,15 @@ def index
                      .order(:name)
 end
 
-  def new
-    @memo = current_user.memos.build
+def new
+  @memo = current_user.memos.build
+  @templates = current_user.templates.order(:name)
+
+  if params[:template_id].present?
+    @selected_template = current_user.templates.find_by(id: params[:template_id])
+    apply_template_defaults(@memo, @selected_template) if @selected_template
   end
+end
 
   def create
     @memo = current_user.memos.build(memo_params)
@@ -103,6 +109,12 @@ end
 
   # edit を「詳細兼編集」として使う
   def edit
+    @templates = current_user.templates.order(:name)
+
+    if params[:template_id].present?
+      @selected_template = current_user.templates.find_by(id: params[:template_id])
+      apply_template_defaults(@memo, @selected_template) if @selected_template
+    end
   end
 
   def update
@@ -122,57 +134,22 @@ end
   end
 
 def ai_feedback
-  @memo = current_user.memos.find(params[:id])
+  memo = current_user.memos.find(params[:id])
 
-  today = Time.zone.today
-  usage = current_user.ai_usages.find_or_create_by!(date: today)
-  limit = 3
+  Ai::FeedbackService.new(user: current_user).call!(memo: memo)
 
-  if usage.count >= limit
-    redirect_to edit_memo_path(@memo), alert: "AIフィードバックは1日#{limit}回までです。明日また試してください。"
-    return
-  end
-
-  memo_hash = {
-    symptom: @memo.symptom.to_s,
-    check_point: @memo.check_point.to_s,
-    judgment: @memo.judgment.to_s,
-    concern_point: @memo.concern_point.to_s,
-    reflection: @memo.reflection.to_s,
-    tag_names: @memo.tags.order(:name).pluck(:name).join(", ")
-  }
-
-  input_digest = Digest::SHA256.hexdigest(memo_hash.values.join("\n"))
-
-  existing = current_user.ai_results.find_by(kind: "feedback", memo_id: @memo.id, input_digest: input_digest)
-  if existing
-    redirect_to edit_memo_path(@memo, anchor: "ai-feedback"), notice: "AIフィードバック（保存済み）を表示しました。"
-    return
-  end
-
-  result_hash = OpenaiClient.new.feedback_for_memo(memo_hash)
-
-  current_user.ai_results.create!(
-    memo: @memo,
-    kind: "feedback",
-    input_digest: input_digest,
-    content: result_hash.fetch(:content),
-    model: result_hash.fetch(:model),
-    prompt_version: result_hash.fetch(:prompt_version)
-  )
-
-  usage.update!(count: usage.count + 1)
-
-  redirect_to edit_memo_path(@memo, anchor: "ai-feedback"), notice: "AIフィードバックを生成しました。"
+  redirect_to edit_memo_path(memo, anchor: "ai-feedback"), notice: "AIフィードバックを生成しました。"
+rescue Ai::Generator::LimitExceeded => e
+  redirect_to edit_memo_path(memo), alert: e.message
 rescue OpenaiClient::TimeoutError => e
   Rails.logger.warn(e.full_message)
-  redirect_to edit_memo_path(@memo), alert: "AIの応答が混み合っているためタイムアウトしました。もう一度お試しください。"
+  redirect_to edit_memo_path(memo), alert: "AIの応答が混み合っているためタイムアウトしました。もう一度お試しください。"
 rescue OpenaiClient::TemporaryError => e
   Rails.logger.warn(e.full_message)
-  redirect_to edit_memo_path(@memo), alert: e.message
+  redirect_to edit_memo_path(memo), alert: e.message
 rescue OpenaiClient::Error => e
   Rails.logger.error(e.full_message)
-  redirect_to edit_memo_path(@memo), alert: "AI生成に失敗しました：#{e.message}"
+  redirect_to edit_memo_path(memo), alert: "AI生成に失敗しました：#{e.message}"
 end
 
 private
@@ -202,5 +179,18 @@ private
 
     @memos = @memos.order(created_at: :desc).distinct
     @favorite_memo_ids = current_user.favorites.pluck(:memo_id)
+  end
+
+  def apply_template_defaults(memo, template)
+    memo.symptom       = memo.symptom.presence       || template.symptom_hint
+    memo.check_point   = memo.check_point.presence   || template.check_point_hint
+    memo.judgment      = memo.judgment.presence      || template.judgment_hint
+    memo.concern_point = memo.concern_point.presence || template.concern_point_hint
+    memo.reflection    = memo.reflection.presence    || template.reflection_hint
+
+    # tag_names をフォームで使っている場合のみ（memo.tag_names がある前提）
+    if memo.respond_to?(:tag_names) && memo.tag_names.blank?
+      memo.tag_names = template.tag_names_hint.to_s
+    end
   end
 end

@@ -2,7 +2,12 @@
 
 <div class="auth-card">
   <h1 class="auth-title"><%= t("devise.registrations.new.title") %></h1>
-
+  <div class="form-consent">
+    登録することで
+    <%= link_to "利用規約", terms_path, target: "_blank", rel: "noopener", class: "form-consent__link" %>、
+    <%= link_to "プライバシーポリシー", privacy_path, target: "_blank", rel: "noopener", class: "form-consent__link" %>
+    に同意したものとみなします。
+  </div>
   <%= form_for(resource,
                as: resource_name,
                url: registration_path(resource_name),

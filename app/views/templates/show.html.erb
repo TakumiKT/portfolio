@@ -1,0 +1,51 @@
+<div class="container">
+  <section class="card">
+    <div class="page-head">
+      <h1 class="page-title">テンプレート：<%= @template.name %></h1>
+
+      <div class="index-actions">
+        <%= link_to "編集", edit_template_path(@template), class: "btn btn--primary" %>
+        <%= link_to "一覧へ戻る", templates_path, class: "btn btn--sub" %>
+      </div>
+    </div>
+
+    <div class="template-show">
+      <div class="template-show__block">
+        <h2>相談内容・症状（例/質問例）</h2>
+        <p><%= simple_format(@template.symptom_hint.presence || "（未入力）") %></p>
+      </div>
+
+      <div class="template-show__block">
+        <h2>接客時に確認したポイント（例/質問例）</h2>
+        <p><%= simple_format(@template.check_point_hint.presence || "（未入力）") %></p>
+      </div>
+
+      <div class="template-show__block">
+        <h2>自分の判断・対応内容（例）</h2>
+        <p><%= simple_format(@template.judgment_hint.presence || "（未入力）") %></p>
+      </div>
+
+      <div class="template-show__block">
+        <h2>注意点・迷った点（任意）</h2>
+        <p><%= simple_format(@template.concern_point_hint.presence || "（未入力）") %></p>
+      </div>
+
+      <div class="template-show__block">
+        <h2>振り返り・改善点（任意）</h2>
+        <p><%= simple_format(@template.reflection_hint.presence || "（未入力）") %></p>
+      </div>
+
+      <div class="template-show__block">
+        <h2>タグ候補</h2>
+        <p><%= @template.tag_names_hint.presence || "（未入力）" %></p>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= link_to "削除",
+            template_path(@template),
+            data: { turbo_method: :delete, turbo_confirm: "削除しますか？" },
+            class: "btn btn--sub" %>
+    </div>
+  </section>
+</div>

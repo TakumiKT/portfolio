@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_28_024556) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_05_022347) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -61,8 +61,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_024556) do
     t.integer "count", default: 0, null: false
     t.datetime "created_at", null: false
     t.date "date"
+    t.string "kind", default: "feedback", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["user_id", "date", "kind"], name: "index_ai_usages_on_user_id_and_date_and_kind", unique: true
     t.index ["user_id", "date"], name: "index_ai_usages_on_user_id_and_date", unique: true
     t.index ["user_id"], name: "index_ai_usages_on_user_id"
   end
@@ -110,6 +112,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_024556) do
     t.index ["user_id"], name: "index_tags_on_user_id"
   end
 
+  create_table "templates", force: :cascade do |t|
+    t.text "check_point_hint"
+    t.text "concern_point_hint"
+    t.datetime "created_at", null: false
+    t.text "judgment_hint"
+    t.string "name"
+    t.text "reflection_hint"
+    t.text "symptom_hint"
+    t.string "tag_names_hint"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_templates_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
@@ -137,4 +153,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_024556) do
   add_foreign_key "memo_tags", "tags"
   add_foreign_key "memos", "users"
   add_foreign_key "tags", "users"
+  add_foreign_key "templates", "users"
 end
