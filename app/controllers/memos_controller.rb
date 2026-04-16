@@ -156,7 +156,7 @@ end
 require "csv"
 
 def export
-  # 公開のみ・タグ・q・お気に入り・期間・sort 
+  # 公開のみ・タグ・q・お気に入り・期間・sort
   # 清書のみ＋現在の検索条件を反映する
   @q        = params[:q].to_s.strip
   @tag_id   = params[:tag_id].presence
