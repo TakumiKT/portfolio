@@ -152,6 +152,92 @@ rescue OpenaiClient::Error => e
   redirect_to edit_memo_path(memo), alert: "AI生成に失敗しました：#{e.message}"
 end
 
+# CSV出力
+require "csv"
+
+def export
+  # 公開のみ・タグ・q・お気に入り・期間・sort 
+  # 清書のみ＋現在の検索条件を反映する
+  @q        = params[:q].to_s.strip
+  @tag_id   = params[:tag_id].presence
+  @from_date = params[:from_date].to_s.strip
+  @to_date   = params[:to_date].to_s.strip
+  @search_in = params[:search_in].presence || "all"
+  @sort      = params[:sort].presence || "newest"
+  favorites  = params[:favorites].present?
+
+  scope = current_user.memos.includes(:tags)
+
+  # お気に入りのみ
+  scope = scope.joins(:favorites).where(favorites: { user_id: current_user.id }) if favorites
+
+  # 清書のみ
+  scope = scope.published
+
+  # タグ
+  if @tag_id.present?
+    scope = scope.joins(:memo_tags).where(memo_tags: { tag_id: @tag_id })
+  end
+
+  # 日付範囲（created_at）
+  if @from_date.present?
+    from = Date.parse(@from_date).beginning_of_day
+    scope = scope.where("memos.created_at >= ?", from)
+  end
+  if @to_date.present?
+    to = Date.parse(@to_date).end_of_day
+    scope = scope.where("memos.created_at <= ?", to)
+  end
+
+  # キーワード（検索対象）
+  if @q.present?
+    like = "%#{ActiveRecord::Base.sanitize_sql_like(@q)}%"
+    scope =
+      case @search_in
+      when "symptom"
+        scope.where("memos.symptom ILIKE ?", like)
+      when "judgment"
+        scope.where("memos.judgment ILIKE ?", like)
+      else
+        scope.left_joins(:tags).where(
+          "memos.symptom ILIKE :q OR memos.check_point ILIKE :q OR memos.judgment ILIKE :q OR memos.concern_point ILIKE :q OR memos.reflection ILIKE :q OR tags.name ILIKE :q",
+          q: like
+        )
+      end
+  end
+
+  scope = scope.distinct
+  scope = (@sort == "oldest") ? scope.order(created_at: :asc) : scope.order(created_at: :desc)
+
+  memos = scope.to_a
+
+  csv = CSV.generate(force_quotes: true) do |rows|
+    rows << [ "作成日", "症状", "確認ポイント", "判断", "注意点", "振り返り", "タグ" ]
+
+    memos.each do |m|
+      rows << [
+        m.created_at.in_time_zone("Tokyo").strftime("%Y-%m-%d %H:%M"),
+        csv_cell(m.symptom),
+        csv_cell(m.check_point),
+        csv_cell(m.judgment),
+        csv_cell(m.concern_point),
+        csv_cell(m.reflection),
+        csv_cell(m.tags.order(:name).pluck(:name).join(","))
+      ]
+    end
+  end
+
+  # Excel対策（UTF-8 BOM）
+  bom = "\uFEFF"
+  filename = "memotc_memos_#{Time.zone.now.strftime('%Y%m%d_%H%M')}.csv"
+
+  send_data bom + csv,
+            filename: filename,
+            type: "text/csv; charset=utf-8"
+rescue ArgumentError
+  redirect_to memos_path, alert: "日付の形式が正しくありません。"
+end
+
 private
 
   # 他ユーザーのメモにアクセスできないよう current_user 経由で取得
@@ -188,9 +274,18 @@ private
     memo.concern_point = memo.concern_point.presence || template.concern_point_hint
     memo.reflection    = memo.reflection.presence    || template.reflection_hint
 
-    # tag_names をフォームで使っている場合のみ（memo.tag_names がある前提）
+    # tag_names をフォームで使っている (memo.tag_names がある前提）
     if memo.respond_to?(:tag_names) && memo.tag_names.blank?
       memo.tag_names = template.tag_names_hint.to_s
     end
+  end
+
+  def csv_cell(text, limit: nil)
+    s = text.to_s
+            .gsub(/\r\n|\r|\n/, " ") # 改行をスペースに
+            .gsub(/\t/, " ") # タブをスペースに
+            .squeeze(" ") # 連続スペースを1つに
+            .strip
+    limit ? s[0, limit] : s
   end
 end

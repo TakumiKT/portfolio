@@ -8,6 +8,18 @@
       </div>
     </div>
 
+                    <%= link_to "CSV出力",
+                      export_memos_path(
+                      q: @q.presence,
+                      tag_id: @tag_id.presence,
+                      favorites: params[:favorites].presence,
+                      search_in: @search_in.presence,
+                      from_date: @from_date.presence,
+                      to_date: @to_date.presence,
+                      sort: @sort.presence
+                    ),
+                    class: "btn btn--sub",
+                    data: { turbo: false } %>
 <%= form_with url: memos_path, method: :get, local: true, class: "search-form" do |f| %>
   <div class="search-form__row">
     <%= f.text_field :q,
@@ -414,6 +426,7 @@
                         sort: @sort.presence
                       ),
                       class: "tag-link" %>
+
               <% end %>
             </div>
           <% end %>

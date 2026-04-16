@@ -20,6 +20,15 @@ Rails.application.routes.draw do
   resources :memos, except: [ :show ] do
     post :ai_feedback, on: :member
   end
+
+  # CSVの出力
+  resources :memos, except: [ :show ] do
+    post :ai_feedback, on: :member
+    collection do
+      get :export
+    end
+  end
+
   # 使い方ガイド
   get "/guide", to: "pages#guide"
 
