@@ -1,0 +1,12 @@
+ja:
+  date:
+    formats:
+      default: "%Y/%m/%d"
+  time:
+    formats:
+      default: "%Y/%m/%d %H:%M"
+  flash:
+    memo:
+      created: "メモを作成しました"
+      updated: "メモを更新しました"
+      destroyed: "メモを削除しました"

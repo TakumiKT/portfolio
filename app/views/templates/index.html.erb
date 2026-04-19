@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="card card--inner">
+  <h2 style="margin-top:0;">テンプレート作成</h2>
+    </div>
+</div>
+
+    <!-- 作成フォーム -->
+    <div class="card" style="margin-top:12px;">
+      <%= form_with model: @template, local: true do |f| %>
+        <%= render "form", f: f, template: @template %>
+      <% end %>
+    </div>
+
+    <!-- 一覧 -->
+    <% if @templates.empty? %>
+      <p class="empty-state" style="margin-top:12px;">まだテンプレートがありません。</p>
+    <% else %>
+      <ul class="template-list">
+        <% @templates.each do |t| %>
+          <li class="template-item">
+            <div class="template-item__name"><%= t.name %></div>
+            <div class="template-item__actions">
+              <%= link_to "表示", template_path(t), class: "btn btn--sub" %>
+              <%= link_to "編集", edit_template_path(t), class: "btn btn--sub" %>
+              <%= link_to "削除", template_path(t),
+                    data: { turbo_method: :delete, turbo_confirm: "削除しますか？" },
+                    class: "btn btn--sub" %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+</div>

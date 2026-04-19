@@ -1,0 +1,67 @@
+<section class="card">
+  <h1 class="page-title">AIレポート</h1>
+
+  <%= form_with url: reports_generate_path, method: :post, local: true, class: "search-form" do %>
+    <div class="search-form__row">
+      <%= text_field_tag :q, @q, placeholder: "キーワード（症状・判断・タグなど）", class: "search-form__input" %>
+      <div class="search-form__actions">
+        <%= submit_tag "レポート生成", class: "btn btn--primary", data: { disable_with: "生成中..." } %>
+        <%= link_to "クリア", reports_path, class: "btn btn--sub" %>
+      </div>
+    </div>
+
+    <div class="ai-usage-note">
+      本日のAIレポート：<%= ai_used(:report) %>/<%= AiUsageHelper::REPORT_LIMIT %> 回（残り <%= ai_remaining(:report) %> 回）
+    </div>
+
+    <div class="search-form__advanced">
+      <div class="search-form__field">
+        <%= label_tag :search_in, "検索対象" %>
+        <%= select_tag :search_in, options_for_select([["全体","all"],["症状","symptom"],["判断","judgment"]], @search_in), class: "search-form__select" %>
+      </div>
+
+      <div class="search-form__field">
+        <%= label_tag :tag_id, "タグ" %>
+        <%= select_tag :tag_id,
+              options_for_select([["指定なし",""]] + current_user.tags.order(:name).map{|t| ["##{t.name}", t.id] }, @tag_id),
+              class: "search-form__select" %>
+      </div>
+
+      <div class="search-form__field">
+        <%= label_tag :from_date, "開始日" %>
+        <%= date_field_tag :from_date, @from_date, class: "search-form__date" %>
+      </div>
+
+      <div class="search-form__field">
+        <%= label_tag :to_date, "終了日" %>
+        <%= date_field_tag :to_date, @to_date, class: "search-form__date" %>
+      </div>
+
+      <div class="search-form__field">
+        <%= label_tag :limit, "直近件数（期間未指定時）" %>
+        <%= select_tag :limit, options_for_select([10,30,50,80], @limit), class: "search-form__select" %>
+      </div>
+
+      <div class="search-form__field">
+        <%= label_tag :sort, "並び順" %>
+        <%= select_tag :sort, options_for_select([["新しい順","newest"],["古い順","oldest"]], @sort), class: "search-form__select" %>
+      </div>
+
+      <div class="search-form__field">
+        <%= label_tag :favorites, "お気に入り" %><br>
+        <%= check_box_tag :favorites, "1", @favorites %>
+        <%= label_tag :favorites, "お気に入りのみ" %>
+      </div>
+    </div>
+
+    <p class="note">※ 学習・振り返り用途です。医療判断の代替ではありません。</p>
+  <% end %>
+</section>
+
+<% if @latest_report.present? %>
+  <section class="card">
+    <h2>最新レポート</h2>
+    <p class="note">生成日時：<%= l(@latest_report.created_at.in_time_zone("Tokyo")) %></p>
+    <pre class="ai-output"><%= @latest_report.content %></pre>
+  </section>
+<% end %>

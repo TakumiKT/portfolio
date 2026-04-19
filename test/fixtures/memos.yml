@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  symptom: MyText
+  check_point: MyText
+  judgment: MyText
+  concern_point: MyText
+  reflection: MyText
+
+two:
+  user: two
+  symptom: MyText
+  check_point: MyText
+  judgment: MyText
+  concern_point: MyText
+  reflection: MyText

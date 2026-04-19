@@ -1,0 +1,29 @@
+<div class="page-head">
+  <h1 class="page-title">新規メモ</h1>
+</div>  
+  <div class="card">
+  <div class="search-form__row" style="gap: 10px;">
+    <div class="search-form__field" style="flex: 1;">
+      <%= label_tag :template_id, "テンプレート（任意）" %>
+      <%= select_tag :template_id,
+            options_from_collection_for_select(@templates, :id, :name, params[:template_id]),
+            include_blank: "選択してください",
+            class: "search-form__select",
+            onchange: "location.href='#{new_memo_path}?template_id=' + this.value;" %>
+      <div class="note" style="margin-top:6px;">
+        選択すると、入力欄に例文が入ります（未入力の欄のみ）。
+      </div>
+    </div>
+
+    <div style="display:flex; align-items:flex-end;">
+      <%= link_to "テンプレ管理", templates_path, class: "btn btn--sub" %>
+    </div>
+  </div>  
+  </div>
+<div>
+  <p class="note">接客の流れに沿って記録しましょう（学習・振り返り用）。</p>
+</div>
+
+<%= form_with model: @memo do |f| %>
+  <%= render "form", f: f, memo: @memo %>
+<% end %>
