@@ -1,16 +1,36 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { registrations: "users/registrations" }
-
+  devise_for :users, controllers: {
+    registrations: "users/registrations",
+    omniauth_callbacks: "users/omniauth_callbacks"
+  }
   # ログイン中はメモ一覧をトップにする
   authenticated :user do
     root to: "memos#index", as: :authenticated_root
   end
-
+  resources :memos, except: [ :show ] do
+    resource :favorite, only: [ :create, :destroy ]
+  end
   # 未ログイン時のトップページ
   root to: "pages#home"
 
+  resources :templates
   # メモ
   resources :memos, except: [ :show ]
+
+  resources :memos, except: [ :show ] do
+    post :ai_feedback, on: :member
+  end
+
+  # CSVの出力
+  resources :memos, except: [ :show ] do
+    post :ai_feedback, on: :member
+    collection do
+      get :export
+    end
+  end
+
+  # 使い方ガイド
+  get "/guide", to: "pages#guide"
 
   # フッター
   get "/terms",   to: "pages#terms"
@@ -19,4 +39,11 @@ Rails.application.routes.draw do
 
   # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
+
+  # オートコンプリート
+  get "tags/autocomplete", to: "tags#autocomplete"
+
+  # AIレポート
+  get  "/reports",          to: "reports#index"
+  post "/reports/generate", to: "reports#generate", as: :reports_generate
 end

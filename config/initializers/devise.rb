@@ -9,13 +9,21 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+  config.omniauth :google_oauth2,
+    ENV["GOOGLE_CLIENT_ID"],
+    ENV["GOOGLE_CLIENT_SECRET"],
+    {
+      scope: "email,profile",
+      prompt: "select_account"
+    }
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
   # config.secret_key = '1dc0a8d9d6d8192cbf251bbb0a050b4f0b023518d79cb1e4cb09e8e53ce31ff469a7d6da81a44827049884eb48edb9f460748edf5aa2c6adb6dfc1acb0a0ef7a'
-
+  config.remember_for = 2.weeks
+  config.extend_remember_period = true
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'
@@ -168,7 +176,8 @@ Devise.setup do |config|
 
   # Invalidates all the remember me tokens when the user signs out.
   config.expire_all_remember_me_on_sign_out = true
-
+  config.remember_for = 2.weeks
+  config.extend_remember_period = true
   # If true, extends the user's remember period when remembered via cookie.
   # config.extend_remember_period = false
 

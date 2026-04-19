@@ -1,68 +1,437 @@
-<div class="card">
-<h1>接客メモ一覧</h1>
+<div class="container">
+  <section class="card">
+    <%= link_to "AIレポートを作成", reports_path, class: "btn btn--sub" %>
+    <div class="page-head">
+      <h1 class="page-title">接客メモ一覧</h1>
+      <div class="index-actions">
+        <%= link_to "新規メモを作成", new_memo_path, class: "btn btn--primary" %>
+      </div>
+    </div>
 
-<%= link_to "新規メモを作成", new_memo_path %>
+                    <%= link_to "CSV出力",
+                      export_memos_path(
+                      q: @q.presence,
+                      tag_id: @tag_id.presence,
+                      favorites: params[:favorites].presence,
+                      search_in: @search_in.presence,
+                      from_date: @from_date.presence,
+                      to_date: @to_date.presence,
+                      sort: @sort.presence
+                    ),
+                    class: "btn btn--sub",
+                    data: { turbo: false } %>
+<%= form_with url: memos_path, method: :get, local: true, class: "search-form" do |f| %>
+  <div class="search-form__row">
+    <%= f.text_field :q,
+          value: @q,
+          placeholder: "キーワード（症状・判断内容など）",
+          class: "search-form__input" %>
 
-<%= form_with url: memos_path, method: :get, local: true do |f| %>
-  <%= f.text_field :q, value: @q, placeholder: "キーワード（症状・判断内容など）" %>
+    <%# すでにタグで絞り込み中なら、検索してもタグ条件を維持 %>
+    <% if @tag_id.present? %>
+      <%= hidden_field_tag :tag_id, @tag_id %>
+    <% end %>
+  </div>
 
-  <%# すでにタグで絞り込み中なら、検索してもタグ条件を維持 %>
-  <% if @tag_id.present? %>
-    <%= hidden_field_tag :tag_id, @tag_id %>
-  <% end %>
+  <%# 高度検索（追加） %>
+  <div class="search-form__advanced">
+    <div class="search-form__field">
+      <%= label_tag :search_in, "検索対象" %>
+      <%= select_tag :search_in,
+            options_for_select([["全体", "all"], ["症状", "symptom"], ["判断", "judgment"]], @search_in),
+            class: "search-form__select" %>
+    </div>
 
-  <%= f.submit "検索" %>
+    <div class="search-form__field">
+      <%= label_tag :from_date, "開始日" %>
+      <%= date_field_tag :from_date, @from_date, class: "search-form__date" %>
+    </div>
 
-  <%# 条件リセット %>
-  <%= link_to "クリア", memos_path %>
+    <div class="search-form__field">
+      <%= label_tag :to_date, "終了日" %>
+      <%= date_field_tag :to_date, @to_date, class: "search-form__date" %>
+    </div>
+
+    <div class="search-form__field">
+      <%= label_tag :sort, "並び順" %>
+      <%= select_tag :sort,
+            options_for_select([["新しい順", "newest"], ["古い順", "oldest"]], @sort),
+            class: "search-form__select" %>
+    </div>
+  </div>
+
+  <div class="search-form__actions">
+    <%= f.submit "検索", class: "btn btn--primary" %>
+    <%= link_to "クリア", memos_path, class: "btn btn--sub" %>
+
+    <%# 状態フィルタボタン %>
+    <% if params[:drafts].present? %>
+      <%= link_to "清書",
+            memos_path(
+              q: @q.presence,
+              tag_id: @tag_id.presence,
+              favorites: params[:favorites].presence,
+              search_in: @search_in.presence,
+              from_date: @from_date.presence,
+              to_date: @to_date.presence,
+              sort: @sort.presence,
+              published: 1
+            ),
+            class: "btn btn--sub" %>
+    <% elsif params[:published].present? %>
+      <%= link_to "下書き",
+            memos_path(
+              q: @q.presence,
+              tag_id: @tag_id.presence,
+              favorites: params[:favorites].presence,
+              search_in: @search_in.presence,
+              from_date: @from_date.presence,
+              to_date: @to_date.presence,
+              sort: @sort.presence,
+              drafts: 1
+            ),
+            class: "btn btn--sub" %>
+    <% else %>
+      <%= link_to "下書き",
+            memos_path(
+              q: @q.presence,
+              tag_id: @tag_id.presence,
+              favorites: params[:favorites].presence,
+              search_in: @search_in.presence,
+              from_date: @from_date.presence,
+              to_date: @to_date.presence,
+              sort: @sort.presence,
+              drafts: 1
+            ),
+            class: "btn btn--sub" %>
+
+      <%= link_to "清書",
+            memos_path(
+              q: @q.presence,
+              tag_id: @tag_id.presence,
+              favorites: params[:favorites].presence,
+              search_in: @search_in.presence,
+              from_date: @from_date.presence,
+              to_date: @to_date.presence,
+              sort: @sort.presence,
+              published: 1
+            ),
+            class: "btn btn--sub" %>
+    <% end %>
+
+    <%# お気に入りフィルタ %>
+    <% if params[:favorites].present? %>
+      <%= link_to "全て",
+            memos_path(
+              q: @q.presence,
+              tag_id: @tag_id.presence,
+              drafts: params[:drafts].presence,
+              published: params[:published].presence,
+              search_in: @search_in.presence,
+              from_date: @from_date.presence,
+              to_date: @to_date.presence,
+              sort: @sort.presence
+            ),
+            class: "btn btn--sub" %>
+    <% else %>
+      <%= link_to "お気に入り",
+            memos_path(
+              q: @q.presence,
+              tag_id: @tag_id.presence,
+              drafts: params[:drafts].presence,
+              published: params[:published].presence,
+              search_in: @search_in.presence,
+              from_date: @from_date.presence,
+              to_date: @to_date.presence,
+              sort: @sort.presence,
+              favorites: 1
+            ),
+            class: "btn btn--sub" %>
+    <% end %>
   </div>
 <% end %>
 
-<% if @q.present? || @tag_id.present? %>
-  <p>
-    条件：
-    <% if @q.present? %>キーワード「<%= @q %>」<% end %>
+<%# 条件チップ（見た目を整える） %>
+<% if @q.present? || @tag_id.present? || params[:favorites].present? || params[:drafts].present? || params[:published].present? || @from_date.present? || @to_date.present? || (@search_in.present? && @search_in != "all") || (@sort.present? && @sort != "newest") %>
+  <div class="conditions">
+    <span class="conditions__label">条件：</span>
 
-        <% if @selected_tag.present? %>
-      / <%= link_to "#{@selected_tag.name}", memos_path(tag_id: @selected_tag.id, q: @q.presence) %>
-    <% elsif @tag_id.present? %>
-      / タグ（削除済み）
+    <%# お気に入りのみ %>
+    <% if params[:favorites].present? %>
+      <span class="chip">
+        お気に入りのみ
+        <%= link_to "×",
+              memos_path(
+                q: @q.presence,
+                tag_id: @tag_id.presence,
+                drafts: params[:drafts].presence,
+                published: params[:published].presence,
+                search_in: @search_in.presence,
+                from_date: @from_date.presence,
+                to_date: @to_date.presence,
+                sort: @sort.presence
+              ),
+              class: "chip__x" %>
+      </span>
     <% end %>
-  </p>
+
+    <%# 状態フィルタ %>
+    <% if params[:drafts].present? %>
+      <span class="chip chip--draft">
+        下書きのみ
+        <%= link_to "×",
+              memos_path(
+                q: @q.presence,
+                tag_id: @tag_id.presence,
+                favorites: params[:favorites].presence,
+                search_in: @search_in.presence,
+                from_date: @from_date.presence,
+                to_date: @to_date.presence,
+                sort: @sort.presence
+              ),
+              class: "chip__x" %>
+      </span>
+    <% elsif params[:published].present? %>
+      <span class="chip chip--published">
+        清書のみ
+        <%= link_to "×",
+              memos_path(
+                q: @q.presence,
+                tag_id: @tag_id.presence,
+                favorites: params[:favorites].presence,
+                search_in: @search_in.presence,
+                from_date: @from_date.presence,
+                to_date: @to_date.presence,
+                sort: @sort.presence
+              ),
+              class: "chip__x" %>
+      </span>
+    <% end %>
+
+    <%# 検索対象 %>
+    <% if @search_in.present? && @search_in != "all" %>
+      <span class="chip">
+        検索対象：<%= @search_in == "symptom" ? "症状" : "判断" %>
+        <%= link_to "×",
+              memos_path(
+                q: @q.presence,
+                tag_id: @tag_id.presence,
+                favorites: params[:favorites].presence,
+                drafts: params[:drafts].presence,
+                published: params[:published].presence,
+                from_date: @from_date.presence,
+                to_date: @to_date.presence,
+                sort: @sort.presence
+              ),
+              class: "chip__x" %>
+      </span>
+    <% end %>
+
+    <%# 日付範囲 %>
+    <% if @from_date.present? %>
+      <span class="chip">
+        開始日：<%= @from_date %>
+        <%= link_to "×",
+              memos_path(
+                q: @q.presence,
+                tag_id: @tag_id.presence,
+                favorites: params[:favorites].presence,
+                drafts: params[:drafts].presence,
+                published: params[:published].presence,
+                search_in: @search_in.presence,
+                to_date: @to_date.presence,
+                sort: @sort.presence
+              ),
+              class: "chip__x" %>
+      </span>
+    <% end %>
+
+    <% if @to_date.present? %>
+      <span class="chip">
+        終了日：<%= @to_date %>
+        <%= link_to "×",
+              memos_path(
+                q: @q.presence,
+                tag_id: @tag_id.presence,
+                favorites: params[:favorites].presence,
+                drafts: params[:drafts].presence,
+                published: params[:published].presence,
+                search_in: @search_in.presence,
+                from_date: @from_date.presence,
+                sort: @sort.presence
+              ),
+              class: "chip__x" %>
+      </span>
+    <% end %>
+
+    <%# 並び順 %>
+    <% if @sort.present? && @sort != "newest" %>
+      <span class="chip">
+        並び順：古い順
+        <%= link_to "×",
+              memos_path(
+                q: @q.presence,
+                tag_id: @tag_id.presence,
+                favorites: params[:favorites].presence,
+                drafts: params[:drafts].presence,
+                published: params[:published].presence,
+                search_in: @search_in.presence,
+                from_date: @from_date.presence,
+                to_date: @to_date.presence
+              ),
+              class: "chip__x" %>
+      </span>
+    <% end %>
+
+    <%# キーワード %>
+    <% if @q.present? %>
+      <span class="chip">
+        キーワード：<%= @q %>
+        <%= link_to "×",
+              memos_path(
+                tag_id: @tag_id.presence,
+                favorites: params[:favorites].presence,
+                drafts: params[:drafts].presence,
+                published: params[:published].presence,
+                search_in: @search_in.presence,
+                from_date: @from_date.presence,
+                to_date: @to_date.presence,
+                sort: @sort.presence
+              ),
+              class: "chip__x" %>
+      </span>
+    <% end %>
+
+    <%# タグ %>
+    <% if @selected_tag.present? %>
+      <span class="chip">
+        タグ：#<%= @selected_tag.name %>
+        <%= link_to "×",
+              memos_path(
+                q: @q.presence,
+                favorites: params[:favorites].presence,
+                drafts: params[:drafts].presence,
+                published: params[:published].presence,
+                search_in: @search_in.presence,
+                from_date: @from_date.presence,
+                to_date: @to_date.presence,
+                sort: @sort.presence
+              ),
+              class: "chip__x" %>
+      </span>
+    <% elsif @tag_id.present? %>
+      <span class="chip chip--muted">
+        タグ：（削除済み）
+        <%= link_to "×",
+            memos_path(
+              q: @q.presence,
+              favorites: params[:favorites].presence,
+              drafts: params[:drafts].presence,
+              published: params[:published].presence,
+              search_in: @search_in.presence,
+              from_date: @from_date.presence,
+              to_date: @to_date.presence,
+              sort: @sort.presence
+            ),
+            class: "chip__x" %>
+    </span>
+  <% end %>
+  </div>
 <% end %>
 
-<% if @tags.any? %>
-  <section>
-    <p>タグ一覧：</p>
-
-    <div class="tag-grid">
-      <% @tags.each do |tag| %>
-        <div class="tag-item">
-          <%= link_to "#{tag.name}", memos_path(tag_id: tag.id, q: @q.presence) %>
+    <%# タグ一覧 %>
+    <% if @tags.any? %>
+      <div class="tag-section">
+        <div class="tag-section__title">タグ一覧</div>
+        <div class="tag-grid">
+           <% @tags.each do |tag| %>
+            <div class="tag-item">
+              <%= link_to "##{tag.name}",
+                memos_path(
+                  tag_id: tag.id,
+                  q: @q.presence,
+                  favorites: params[:favorites].presence,
+                  drafts: params[:drafts].presence,
+                  published: params[:published].presence,
+                  search_in: @search_in.presence,
+                  from_date: @from_date.presence,
+                  to_date: @to_date.presence,
+                  sort: @sort.presence
+                ) %>
         </div>
       <% end %>
     </div>
-  </section>
+  </div>
 <% end %>
+  <% if @memos.empty? %>
+    <section class="card">
+      <p class="empty-state">まだメモがありません。まずは1件作成してみましょう。</p>
+    </section>
+  <% else %>
+    <div class="memo-list">
+      <% @memos.each do |memo| %>
+        <article class="memo-card">
+          <div class="memo-card__head">
+            <div class="memo-card__left">
+              <div class="memo-card__date"><%= memo.created_at.strftime("%Y/%m/%d") %></div>
+              <div class="memo-card__badges">
+              <% if memo.draft? %>
+                <span class="chip chip--draft">下書き</span>
+              <% else %>
+                <span class="chip chip--published">清書</span>
+                <% end %>
+              </div>
+            </div>
 
-<% if @memos.empty? %>
-  <p>まだメモがありません。まずは1件作成してみましょう。</p>
-<% else %>
-  <ul>
-    <% @memos.each do |memo| %>
-      <li>
-        <strong><%= memo.created_at.strftime("%Y/%m/%d") %></strong>
-        <%= truncate(memo.symptom, length: 40) %>
-        <%= link_to "開く", edit_memo_path(memo) %>
+            <div class="memo-card__actions">
+              <% favorited = @favorite_memo_ids.include?(memo.id) %>
 
-        <% if memo.tags.any? %>
-          <div>
-            <% memo.tags.each do |tag| %>
-              <%= link_to "##{tag.name}", memos_path(tag_id: tag.id, q: @q.presence) %>
-            <% end %>
+              <% if favorited %>
+                <%= button_to "★", memo_favorite_path(memo),
+                      method: :delete,
+                      class: "favorite-btn favorite-btn--on",
+                      form: { data: { turbo: true } },
+                      aria: { label: "お気に入り解除" } %>
+              <% else %>
+                <%= button_to "☆", memo_favorite_path(memo),
+                      method: :post,
+                      class: "favorite-btn",
+                      form: { data: { turbo: true } },
+                      aria: { label: "お気に入りに追加" } %>
+              <% end %>
+
+              <%= link_to "開く", edit_memo_path(memo), class: "btn btn--sub" %>
+            </div>
           </div>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
+
+          <div class="memo-card__symptom"><%= truncate(memo.symptom, length: 40) %></div>
+
+          <% if memo.judgment.present? %>
+            <div class="memo-card__sub">判断：<%= truncate(memo.judgment, length: 40) %></div>
+          <% end %>
+
+          <% if memo.tags.any? %>
+            <div class="memo-card__tags">
+              <% memo.tags.each do |tag| %>
+                <%= link_to "##{tag.name}",
+                      memos_path(
+                        tag_id: tag.id,
+                        q: @q.presence,
+                        favorites: params[:favorites].presence,
+                        drafts: params[:drafts].presence,
+                        published: params[:published].presence,
+                        search_in: @search_in.presence,
+                        from_date: @from_date.presence,
+                        to_date: @to_date.presence,
+                        sort: @sort.presence
+                      ),
+                      class: "tag-link" %>
+
+              <% end %>
+            </div>
+          <% end %>
+        </article>
+      <% end %>
+    </div>
+  <% end %>
+</div>

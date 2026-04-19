@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :memo_tag do
-    memo
-    tag
+    association :memo
+    association :tag
   end
 end
