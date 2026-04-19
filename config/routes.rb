@@ -13,12 +13,22 @@ Rails.application.routes.draw do
   # 未ログイン時のトップページ
   root to: "pages#home"
 
+  resources :templates
   # メモ
   resources :memos, except: [ :show ]
 
-  resources :memos, except: [:show] do
+  resources :memos, except: [ :show ] do
     post :ai_feedback, on: :member
   end
+
+  # CSVの出力
+  resources :memos, except: [ :show ] do
+    post :ai_feedback, on: :member
+    collection do
+      get :export
+    end
+  end
+
   # 使い方ガイド
   get "/guide", to: "pages#guide"
 
@@ -32,8 +42,8 @@ Rails.application.routes.draw do
 
   # オートコンプリート
   get "tags/autocomplete", to: "tags#autocomplete"
-  
-  #AIレポート
+
+  # AIレポート
   get  "/reports",          to: "reports#index"
   post "/reports/generate", to: "reports#generate", as: :reports_generate
 end

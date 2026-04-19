@@ -39,7 +39,7 @@ module Ai
 
     def increment_usage!
       usage = @user.ai_usages.find_or_create_by!(date: Time.zone.today, kind: @kind)
-      sage.update!(count: usage.count + 1)
+      usage.update!(count: usage.count + 1)
     end
 
     def find_existing(input_digest, memo)
