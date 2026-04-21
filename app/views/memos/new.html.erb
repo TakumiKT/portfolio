@@ -6,7 +6,7 @@
     <div class="search-form__field" style="flex: 1;">
       <%= label_tag :template_id, "テンプレート（任意）" %>
       <%= select_tag :template_id,
-            options_from_collection_for_select(@templates, :id, :name, params[:template_id]),
+            options_from_collection_for_select(@templates || [], :id, :name, params[:template_id]),
             include_blank: "選択してください",
             class: "search-form__select",
             onchange: "location.href='#{new_memo_path}?template_id=' + this.value;" %>
