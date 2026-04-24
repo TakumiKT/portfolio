@@ -244,7 +244,7 @@ GEM
     omniauth-rails_csrf_protection (2.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    openai (0.55.0)
+    openai (0.59.0)
       base64
       cgi
       connection_pool
