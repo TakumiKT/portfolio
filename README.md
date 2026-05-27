@@ -279,8 +279,49 @@ MEMOTCは、登録販売者の接客メモを「思考プロセスに沿って�
 - **debug / web-console**：開発中の原因切り分けを効率化する為です。
 
 
+<<<<<<< HEAD
 ## ER図
 <img width="1265" height="961" alt="Image" src="https://github.com/user-attachments/assets/d7c77e36-5ff2-4899-8af1-55252c68c6bd" />
+=======
+### 認証 / OAuth
+
+- Devise（devise `~> 4.9`）
+- Google OAuth（omniauth-google-oauth2）
+- CSRF保護（omniauth-rails_csrf_protection）
+
+### i18n（日本語化）
+
+- rails-i18n
+- devise-i18n
+
+
+### AI
+
+- OpenAI API（openai）
+
+
+### Rails 8 DB-backed adapters
+
+- solid_cache
+- solid_queue
+- solid_cable
+
+
+### HTML解析（テスト/補助）
+
+- nokogiri
+
+
+### 開発 / テスト / 品質
+
+- RSpec（rspec-rails）
+- FactoryBot（factory_bot_rails）
+- Faker（faker）
+- System test（capybara / selenium-webdriver）
+- Lint（rubocop / rubocop-rails / rubocop-rails-omakase）
+- Security（brakeman / bundler-audit）
+- Debug（debug / web-console）
+>>>>>>> origin/main
 
 
 ## お問い合わせ ## 
