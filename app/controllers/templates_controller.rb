@@ -51,7 +51,8 @@ class TemplatesController < ApplicationController
       :name,
       :symptom_hint, :check_point_hint, :judgment_hint,
       :concern_point_hint, :reflection_hint,
-      :tag_names_hint
+      #:tag_names_hint
     )
+    @memo.tag_names = t.tag_names_hint if t.respond_to?(:tag_names_hint)
   end
 end
